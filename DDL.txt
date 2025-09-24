@@ -1,0 +1,75 @@
+CREATE DATABASE sallevar;
+USE sallevar;
+
+CREATE TABLE cliente (
+  id_cliente INT PRIMARY KEY AUTO_INCREMENT,
+  nombre_completo VARCHAR(255),
+  matricula SMALLINT,
+  carrera VARCHAR(255),
+  repartidor BOOLEAN,
+  negocios_favoritos VARCHAR(255),
+  contrasena VARCHAR(64),
+  foto VARCHAR(255),
+  telefono VARCHAR(15)
+);
+
+CREATE TABLE negocio (
+  id_negocio INT PRIMARY KEY AUTO_INCREMENT,
+  nombre VARCHAR(255),
+  categoria ENUM(''),
+  rating DECIMAL,
+  rango_precios ENUM('0-50', '50-100', '100-150', '150-200', '+200'),
+  ubicacion VARCHAR(255),
+  nombre_responsable VARCHAR(255),
+  telefono VARCHAR(15),
+  categorias VARCHAR(255),
+  imagen VARCHAR(255),
+  horario_atencion TIME,
+  activo BOOLEAN
+);
+
+CREATE TABLE producto (
+  id_producto INT PRIMARY KEY AUTO_INCREMENT,
+  nombre VARCHAR(100),
+  precio DECIMAL(10, 2),
+  descripcion VARCHAR(255),
+  imagen VARCHAR(255),
+  id_negocio INT,
+  categoria ENUM(''),
+  disponible BOOLEAN,
+  FOREIGN KEY (id_negocio) REFERENCES Negocio(id_negocio)
+);
+
+CREATE TABLE pedido (
+  id_pedido INT PRIMARY KEY AUTO_INCREMENT,
+  fecha_pedido DATE,
+  estado ENUM('pendiente', 'en_proceso', 'entregado', 'cancelado'),
+  id_cliente INT,
+  id_negocio INT,
+  monto_total DECIMAL(10, 2),
+  estado_pago ENUM('pendiente', 'pagado', 'fallido'),
+  rating_pedido DECIMAL(2, 1),
+  FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
+  FOREIGN KEY (id_negocio) REFERENCES Negocio(id_negocio)
+);
+
+CREATE TABLE detalle_pedido (
+  id_detalle_pedido INT PRIMARY KEY AUTO_INCREMENT,
+  id_pedido INT,
+  id_producto INT,
+  cantidad INT,
+  precio_unitario DECIMAL(10, 2),
+  FOREIGN KEY (id_pedido) REFERENCES Pedido(id_pedido),
+  FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
+);
+
+CREATE TABLE estadisticas (
+  id_estadistica INT PRIMARY KEY AUTO_INCREMENT,
+  fecha_inicio DATE,
+  monto_total DECIMAL(10, 2),
+  rating_promedio DECIMAL(2, 1),
+  producto_mas_vendido VARCHAR(255),
+  numero_ventas INT,
+  id_restaurante INT,
+  FOREIGN KEY (id_restaurante) REFERENCES Negocio(id_negocio)
+);
