@@ -1,0 +1,11 @@
+__pycache__
+
+venv/
+.venv/
+env/
+.env/
+ENV/
+*.venv/
+*env/
+
+config/database.py
