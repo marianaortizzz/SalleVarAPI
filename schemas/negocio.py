@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Literal
+from datetime import time
 
 class Negocio(BaseModel):
     nombre: str = Field(min_length=1, max_length=255)
@@ -11,7 +12,7 @@ class Negocio(BaseModel):
     telefono: str = Field(min_length=7, max_length=15)
     categorias: str | None = Field(default=None, max_length=255)
     imagen: str | None = Field(default=None, max_length=255)
-    horario_atencion: str = Field(min_length=1, max_length=8) 
+    horario_atencion: time | None = Field(default=None)
     activo: bool
 
     class Config:

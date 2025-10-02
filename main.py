@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from config.database import Session, engine, Base
+from config.database import SessionLocal, engine, Base
 from routers.cliente import cliente_router
 from routers.negocio import negocio_router
 
