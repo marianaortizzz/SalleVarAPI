@@ -16,6 +16,10 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(cliente_router)
 app.include_router(negocio_router)
+app.include_router(pedido_router)
+app.include_router(detalle_pedido_router)
+app.include_router(producto_router)
+app.include_router(estadistica_router)
 
 @app.get("/", tags=["Home"])
 def read_root():
