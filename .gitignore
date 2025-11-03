@@ -9,3 +9,4 @@ ENV/
 *env/
 
 config/database.py
+models/SalleVar.code-workspace
