@@ -9,3 +9,4 @@ class DetallePedido(Base):
     id_producto = Column(Integer, ForeignKey('producto.id_producto'))
     cantidad = Column(Integer)
     precio_unitario = Column(DECIMAL(10, 2))
+    rating = Column(DECIMAL(2, 1), nullable=True)

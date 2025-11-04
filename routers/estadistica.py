@@ -35,13 +35,6 @@ def create_estadistica(estadistica: Estadistica, db: Session = Depends(get_db)):
     nueva_estadistica = EstadisticaService(db).create_estadistica(estadistica)
     return nueva_estadistica
 
-# Actualizar una estadística existente
-@estadistica_router.put("/estadisticas/{id_estadistica}", tags=["Estadísticas"], response_model=Estadistica)
-def update_estadistica(id_estadistica: int, estadistica: Estadistica, db: Session = Depends(get_db)):
-    actualizada = EstadisticaService(db).update_estadistica(id_estadistica, estadistica)
-    if actualizada:
-        return actualizada
-    raise HTTPException(status_code=404, detail="Estadística no encontrada")
 
 # Eliminar una estadística por ID
 @estadistica_router.delete("/estadisticas/{id_estadistica}", tags=["Estadísticas"])

@@ -22,7 +22,6 @@ class ClienteService:
         Crear un cliente
         """
         cliente_data = cliente.model_dump()
-
         new_cliente = ClienteModel(**cliente_data)
         self.db.add(new_cliente)
         self.db.commit()

@@ -13,3 +13,5 @@ class Cliente(Base):
     contrasena = Column(String(64))
     foto = Column(String(255))
     telefono = Column(String(15))
+    edificio = Column(String(1))
+    salon = Column(SmallInteger)

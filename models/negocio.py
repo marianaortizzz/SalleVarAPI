@@ -5,7 +5,6 @@ class Negocio(Base):
 
     id_negocio = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nombre = Column(String(255))
-    categoria = Column(Enum('Comida', 'Bebidas', 'Farmacia', 'Servicios', 'Entretenimiento'))  # ⚠️ Definir valores reales del enum
     rating = Column(DECIMAL)
     rango_precios = Column(Enum('0-50', '50-100', '100-150', '150-200', '+200'))
     ubicacion = Column(String(255))
@@ -13,5 +12,6 @@ class Negocio(Base):
     telefono = Column(String(15))
     categorias = Column(String(255))
     imagen = Column(String(255))
-    horario_atencion = Column(Time)
+    horario_apertura = Column(Time)
+    horario_cierre = Column(Time)
     activo = Column(Boolean)
