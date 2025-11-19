@@ -11,7 +11,7 @@ class Producto(BaseModel):
     id_negocio: int | None = Field(..., description="Identificador del negocio al que pertenece el producto")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         json_schema = {
             "example": {
                 "id_producto": 1,
