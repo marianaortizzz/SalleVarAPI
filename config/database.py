@@ -12,7 +12,10 @@ SQLALCHEMY_DATABASE_URL = os.environ.get(
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, 
-    echo=True  
+    echo=True,
+    connect_args={
+        'ssl': {'ssl_mode': 'REQUIRED'}
+    }
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
