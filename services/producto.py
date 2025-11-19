@@ -1,5 +1,5 @@
-from SalleVarAPI.models import Producto as ProductoModel
-from SalleVarAPI.schemas import Producto
+from models.producto import Producto as ProductoModel
+from schemas.producto import Producto
 
 class ProductoService:
     def __init__(self, db) -> None:
