@@ -3,10 +3,18 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-# Reemplaza 'user', 'password' y 'database_name' con tus credenciales de MySQL..
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:root@127.0.0.1:3306/sallevar"
+DEFAULT_DATABASE_URL = "mysql+pymysql://root:root@127.0.0.1:3306/sallevar"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+SQLALCHEMY_DATABASE_URL = os.environ.get(
+    "DATABASE_URL",
+    DEFAULT_DATABASE_URL
+)
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, 
+    echo=True  
+)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
