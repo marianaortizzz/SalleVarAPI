@@ -1,8 +1,8 @@
 from sqlalchemy import func
-from SalleVarAPI.models import Estadistica as EstadisticaModel
-from SalleVarAPI.schemas import Estadistica
-from SalleVarAPI.models.detalle_pedido import DetallePedido as DetallePedidoModel
-from SalleVarAPI.models.pedido import Pedido as PedidoModel
+from models.estadisticas import Estadistica as EstadisticaModel
+from schemas.estadisticas import Estadistica
+from models.detalle_pedido import DetallePedido as DetallePedidoModel
+from models.pedido import Pedido as PedidoModel
 class EstadisticaService:
     def __init__(self, db) -> None:
         self.db = db
