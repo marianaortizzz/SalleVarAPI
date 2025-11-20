@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, Date, DECIMAL, Enum, ForeignKey
 class Pedido(Base):
     __tablename__ = "pedido"
 
-    campo = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    id_pedido = Column(Integer, primary_key=True, index=True, autoincrement=True)
     fecha_pedido = Column(Date)
     status = Column(Enum('Pendiente', 'En_proceso', 'Completado', 'Cancelado'))
     id_cliente = Column(Integer, ForeignKey('cliente.id_cliente'))
