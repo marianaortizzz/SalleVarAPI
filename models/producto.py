@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship, declarative_base
 Base = declarative_base()
 
 class Producto(Base):
-    __tablename__ = 'producto'
+    __tablename__ = "producto"
 
     id_producto = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String(100), nullable=True)
