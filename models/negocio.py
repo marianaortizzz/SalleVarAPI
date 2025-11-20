@@ -1,5 +1,6 @@
 from config.database import Base
 from sqlalchemy import Column, Integer, String, Boolean, DECIMAL, Enum, Time
+from sqlalchemy.orm import relationship
 class Negocio(Base):
     __tablename__ = "negocio"
 
@@ -15,3 +16,5 @@ class Negocio(Base):
     horario_apertura = Column(Time)
     horario_cierre = Column(Time)
     activo = Column(Boolean)
+    productos = relationship('Producto', back_populates='negocio')
+    estadisticas = relationship('Estadistica', back_populates='restaurante')

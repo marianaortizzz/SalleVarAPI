@@ -1,11 +1,9 @@
+from config.database import Base
 from sqlalchemy import Column, Integer, Date, Numeric, String, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
 
 class Estadistica(Base):
-    __tablename__ = 'estadisticas'
+    __tablename__ = "estadisticas"
 
     id_estadistica = Column(Integer, primary_key=True, autoincrement=True)
     fecha_inicio = Column(Date, nullable=True)
@@ -14,5 +12,5 @@ class Estadistica(Base):
     producto_mas_vendido = Column(String(255), nullable=True)
     numero_ventas = Column(Integer, nullable=True)
     
-    id_restaurante = Column(Integer, ForeignKey('Negocio.id_negocio'), nullable=False)
+    id_restaurante = Column(Integer, ForeignKey('negocio.id_negocio'), nullable=False)
     restaurante = relationship('Negocio', back_populates='estadisticas', foreign_keys=[id_restaurante])

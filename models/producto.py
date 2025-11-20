@@ -1,7 +1,6 @@
+from config.database import Base
 from sqlalchemy import Column, Integer, String, Numeric, Boolean, ForeignKey
-from sqlalchemy.orm import relationship, declarative_base
-
-Base = declarative_base()
+from sqlalchemy.orm import relationship
 
 class Producto(Base):
     __tablename__ = "producto"
@@ -14,5 +13,5 @@ class Producto(Base):
     categoria = Column(String(50), nullable=True)
     disponible = Column(Boolean, nullable=False, default=True)
 
-    id_negocio = Column(Integer, ForeignKey('Negocio.id_negocio'), nullable=True)
+    id_negocio = Column(Integer, ForeignKey('negocio.id_negocio'), nullable=True)
     negocio = relationship('Negocio', back_populates='productos')
