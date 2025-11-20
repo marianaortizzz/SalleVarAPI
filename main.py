@@ -13,6 +13,7 @@ from routers.pedido import pedido_router
 from routers.detalle_pedido import detalle_pedido_router
 from routers.producto import producto_router
 from routers.estadistica import estadistica_router
+from routers.pictures import picture_router
 
 app= FastAPI()
 app.title="La poderosisima API de SalleVar"
@@ -26,9 +27,11 @@ app.include_router(pedido_router)
 app.include_router(detalle_pedido_router)
 app.include_router(producto_router)
 app.include_router(estadistica_router)
-
+app.include_router(picture_router)
 @app.get("/", tags=["Home"])
 def read_root():
     return "Hola mundo"
+
+
 
 
