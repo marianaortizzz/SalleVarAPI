@@ -31,8 +31,8 @@ def get_estadistica(id_estadistica: int, db: Session = Depends(get_db)):
 
 # Crear una nueva estadística
 @estadistica_router.post("/estadisticas", tags=["Estadísticas"], response_model=Estadistica, status_code=201)
-def create_estadistica(estadistica: Estadistica, db: Session = Depends(get_db)):
-    nueva_estadistica = EstadisticaService(db).create_estadistica(estadistica)
+def create_estadistica(id_restaurante: int, db: Session = Depends(get_db)):
+    nueva_estadistica = EstadisticaService(db).create_estadistica(id_restaurante)
     return nueva_estadistica
 
 

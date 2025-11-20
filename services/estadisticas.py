@@ -3,6 +3,10 @@ from models.estadisticas import Estadistica as EstadisticaModel
 from schemas.estadisticas import Estadistica
 from models.detalle_pedido import DetallePedido as DetallePedidoModel
 from models.pedido import Pedido as PedidoModel
+from sqlalchemy.orm import Session
+from datetime import datetime, timedelta
+from models.negocio import Negocio as NegocioModel
+
 class EstadisticaService:
     def __init__(self, db) -> None:
         self.db = db
@@ -18,7 +22,7 @@ class EstadisticaService:
         """
         return self.db.query(EstadisticaModel).filter(EstadisticaModel.id_estadistica == id_estadistica).first()
     
-    def create_estadistica(self, id_restaurante: int):
+    def create_estadistica(self, id_restaurante: int, fecha_inicio: datetime):
         """
         Crear una estadística
         """
@@ -51,6 +55,18 @@ class EstadisticaService:
 
         return new_estadistica
     
+
+    def ejecutar_tarea_quincenal(self):
+        try:
+            fifteen_days_ago = datetime.now() - timedelta(days=15)
+            negocios = self.db.query(NegocioModel).all()
+
+            for negocio in negocios:
+                self.create_estadistica(negocio.id_negocio, fifteen_days_ago)
+        except Exception as e:
+            print(f"[{datetime.now()}] Error al ejecutar la tarea quincenal: {e}")
+
+        
     
     def delete_estadistica(self, id_estadistica: int):
         """
