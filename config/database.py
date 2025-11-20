@@ -12,9 +12,11 @@ SQLALCHEMY_DATABASE_URL = os.environ.get(
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, 
-    echo=True,
+    echo=True, 
     connect_args={
-        'ssl_mode': 'REQUIRED'  # Cambiado de 'ssl' con 'ssl_mode' para corregir el error
+        'ssl': {
+            'ssl_mode': 'REQUIRED'
+        }
     }
 )
 
