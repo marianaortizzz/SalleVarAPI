@@ -14,7 +14,7 @@ engine = create_engine(
     SQLALCHEMY_DATABASE_URL, 
     echo=True,
     connect_args={
-        'ssl': {'ssl_mode': 'REQUIRED'}
+        'ssl_mode': 'REQUIRED'  # Cambiado de 'ssl' con 'ssl_mode' para corregir el error
     }
 )
 
