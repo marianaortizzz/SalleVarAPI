@@ -12,3 +12,18 @@ class ProductoMenu(BaseModel):
     disponible: bool
     id_negocio: str
     modificadores: List[ModificadorProducto]
+
+    class Config:
+        json_schema = {
+            "example": {
+                "id_producto": "1",
+                "nombre": "Hamburguesa",
+                "precio": 8.99,
+                "descripcion": "Deliciosa hamburguesa con queso",
+                "imagen": "hamburguesa.jpg",
+                "categoria": "Comida Rápida",
+                "disponible": True,
+                "id_negocio": "101",
+                "modificadores": [ ]
+            }
+        }

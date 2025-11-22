@@ -4,6 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import List, Optional
 from SalleVarAPI.schemas.producto_pedido import ProductoPedido
+from SalleVarAPI.schemas.repartidor import Repartidor
 
 class Pedido(BaseModel):
     fecha: str # Considera usar datetime.datetime si manejas objetos de fecha
@@ -18,7 +19,7 @@ class Pedido(BaseModel):
     rating_rep: Optional[int] = None
     codigo_pedido: str
     codigo_rep: str
-    repartidor: Optional[str] = None
+    repartidor: Optional[Repartidor] = None
     id_repartidor: Optional[str] = None
     para_llevar: bool
     comentarios: str
@@ -39,7 +40,12 @@ class Pedido(BaseModel):
                 "rating_rep": 4,
                 "codigo_pedido": "PED789",
                 "codigo_rep": "REP101",
-                "repartidor": "Juan Perez",
+                "repartidor": {
+                    "id_repartidor": "rep123",
+                    "nombre": "Juan Perez",
+                    "telefono": "555-1234",
+                    "vehiculo": "Moto"
+                },
                 "id_repartidor": "rep123",
                 "para_llevar": False,
                 "comentarios": "Por favor, entregar rápido.",
@@ -65,4 +71,3 @@ class Pedido(BaseModel):
                 ]
             }
         }
-        
