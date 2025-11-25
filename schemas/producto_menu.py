@@ -3,14 +3,14 @@ from typing import List
 from SalleVarAPI.schemas.modificador_producto import ModificadorProducto
 
 class ProductoMenu(BaseModel):
-    id_producto: str
+    id_producto: int
     nombre: str
     precio: float
     descripcion: str
     imagen: str
     categoria: str
     disponible: bool
-    id_negocio: str
+    id_negocio: int
     modificadores: List[ModificadorProducto]
 
     class Config:
@@ -23,7 +23,7 @@ class ProductoMenu(BaseModel):
                 "imagen": "hamburguesa.jpg",
                 "categoria": "Comida Rápida",
                 "disponible": True,
-                "id_negocio": "101",
+                "id_negocio": 101,
                 "modificadores": [ ]
             }
         }

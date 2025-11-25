@@ -1,5 +1,5 @@
 from config.database import Base
-from sqlalchemy import Column, Integer, DECIMAL, ForeignKey
+from sqlalchemy import Column, Integer, DECIMAL, ForeignKey, String
 
 class DetallePedido(Base):
     __tablename__ = "detalle_pedido"
@@ -10,3 +10,6 @@ class DetallePedido(Base):
     cantidad = Column(Integer)
     precio_unitario = Column(DECIMAL(10, 2))
     rating = Column(DECIMAL(2, 1), nullable=True)
+    opciones = Column(String(255), nullable=True)
+    comentarios = Column(String(255), nullable=True)
+    total_producto = Column(DECIMAL(10, 2))

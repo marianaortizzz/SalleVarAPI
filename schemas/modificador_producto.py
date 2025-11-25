@@ -2,11 +2,11 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 class OpcionModificador(BaseModel):
-    id_opcion: str
+    id_opcion: int
     nombre: str
     precio_adicional: float
     disponible: bool
-    id_producto: str
+    id_modificador: int
 
     class Config:
         json_schema = {
@@ -20,10 +20,11 @@ class OpcionModificador(BaseModel):
         }
 
 class ModificadorProducto(BaseModel):
-    id_modificador: str
+    id_modificador: int
     nombre_modificador: str
     num_max_selec: int
     opciones: List[OpcionModificador]
+    id_producto: int
 
     class Config:
         json_schema = {

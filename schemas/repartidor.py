@@ -1,3 +1,7 @@
+from pydantic import BaseModel
+
+
+#Josa esto solo es un schema prueba, modificalo
 class Repartidor(BaseModel):
     id_repartidor: str
     nombre: str

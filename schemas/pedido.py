@@ -7,7 +7,8 @@ from SalleVarAPI.schemas.producto_pedido import ProductoPedido
 from SalleVarAPI.schemas.repartidor import Repartidor
 
 class Pedido(BaseModel):
-    fecha: str # Considera usar datetime.datetime si manejas objetos de fecha
+    id_pedido: int
+    fecha: str 
     status_general: str
     status_rest: str
     status_rep: str
@@ -17,17 +18,19 @@ class Pedido(BaseModel):
     status_pago: str
     rating_pedido: Optional[int] = None
     rating_rep: Optional[int] = None
-    codigo_pedido: str
-    codigo_rep: str
+    codigo_restaurante: str
+    codigo_repartidor: str
+    delivery: bool
     repartidor: Optional[Repartidor] = None
-    id_repartidor: Optional[str] = None
     para_llevar: bool
     comentarios: str
     productos: List[ProductoPedido]
 
+
     class Config:
         json_schema = {
             "example": {
+                "id_pedido": 1001,
                 "fecha": "2024-10-01T12:30:00",
                 "status_general": "En Proceso",
                 "status_rest": "Preparando",
