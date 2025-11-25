@@ -57,3 +57,13 @@ def delete_negocio(negocio_id: int, db: Session = Depends(get_db)):
 def filtrar_negocios(filtros: FilterRequestModel, db=Depends(get_db)):
     service = NegocioService(db)
     return service.filtrar_negocios(filtros)
+
+
+# Obtener estadísticas de un negocio
+@negocio_router.get("/negocios/{id_negocio}/estadisticas", response_model=dict)
+def obtener_estadisticas_negocio(id_negocio: int, db: Session = Depends(get_db)):
+    service = NegocioService(db)
+    estadisticas = service.obtener_estadistica_negocio(id_negocio)
+    if estadisticas is None:
+        raise HTTPException(status_code=404, detail="Negocio no encontrado")
+    return estadisticas

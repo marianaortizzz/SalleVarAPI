@@ -1,5 +1,9 @@
+from sqlalchemy import func
 from models.negocio import Negocio as NegocioModel
 from schemas.negocio import Negocio
+from models.pedido import Pedido as PedidoModel
+from models.detalle_pedido import DetallePedido as DetallePedidoModel  # OPCIONAL
+
 
 class NegocioService:
     def __init__(self, db) -> None:
@@ -91,3 +95,56 @@ class NegocioService:
             )
 
         return query.all()
+
+    # ESTADISTICA DE NEGOCIO
+    def obtener_estadistica_negocio(self, id_negocio: int):
+        """
+        Obtener estadísticas básicas del negocio.
+        """
+
+        negocio = (
+            self.db.query(NegocioModel)
+            .filter(NegocioModel.id_negocio == id_negocio)
+            .first()
+        )
+
+        if not negocio:
+            return None
+
+        # TOTAL DE PEDIDOS
+        total_pedidos = (
+            self.db.query(PedidoModel)
+            .filter(PedidoModel.id_negocio == id_negocio)
+            .count()
+        )
+
+        # TOTAL INGRESOS
+        ingresos_totales = (
+            self.db.query(func.sum(PedidoModel.total))
+            .filter(PedidoModel.id_negocio == id_negocio)
+            .scalar()
+        ) or 0
+
+        # TOTAL PRODUCTOS VENDIDOS (SI EXISTE TABLA DETALLE)
+        try:
+            productos_vendidos = (
+                self.db.query(func.sum(DetallePedidoModel.cantidad))
+                .join(PedidoModel, DetallePedidoModel.id_pedido == PedidoModel.id_pedido)
+                .filter(PedidoModel.id_negocio == id_negocio)
+                .scalar()
+            ) or 0
+        except:
+            # si no existe tabla detalle_pedido
+            productos_vendidos = None
+
+        # RATING DEL NEGOCIO
+        rating = float(negocio.rating) if negocio.rating else 0.0
+
+        return {
+            "id_negocio": id_negocio,
+            "total_pedidos": total_pedidos,
+            "ingresos_totales": float(ingresos_totales),
+            "productos_vendidos": productos_vendidos,
+            "rating": rating
+        }
+
