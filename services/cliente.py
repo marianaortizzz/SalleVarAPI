@@ -1,5 +1,9 @@
 from models.cliente import Cliente as ClienteModel
 from schemas.cliente import Cliente
+from schemas.LoginRequest import LoginRequest
+from schemas.LoginResponse import LoginResponse
+from schemas.RepartidorResponse import RepartidorResponse
+from schemas.UsuarioResponse import UsuarioResponse
 
 class ClienteService:
     def __init__(self, db) -> None:
@@ -57,3 +61,47 @@ class ClienteService:
         result = self.db.query(ClienteModel).filter(ClienteModel.id_cliente == id_cliente).delete()
         self.db.commit()
         return result
+    
+    # LOGIN
+    def login(self, login_data: LoginRequest):
+        usuario = self.db.query(ClienteModel).filter(
+            (ClienteModel.telefono == login_data.usuario) |
+            (ClienteModel.matricula == login_data.usuario)
+        ).first()
+
+        if usuario is None:
+            return None
+        
+        if usuario.contrasena != login_data.contraseña:
+            return False
+
+        return usuario
+
+    # CONVERTIR A USUARIO
+    def convert_to_usuario(self, cliente: ClienteModel):
+        return UsuarioResponse(
+            id_usuario=cliente.id_cliente,
+            nombre_usuario=str(cliente.matricula),
+            nombre_completo=cliente.nombre_completo,
+            matricula=cliente.matricula,
+            carrera=cliente.carrera,
+            negocio_favorito=cliente.negocios_favoritos,
+            foto=cliente.foto,
+            telefono=cliente.telefono,
+            edificio=cliente.edificio,
+            salon=cliente.salon
+        )
+
+    # CONVERTIR A REPARTIDOR
+    def convert_to_repartidor(self, cliente: ClienteModel):
+        numero_pedidos = 0
+        rating_promedio = 5.0
+
+        return RepartidorResponse(
+            id_usuario=cliente.id_cliente,
+            nombre_completo=cliente.nombre_completo,
+            telefono=cliente.telefono,
+            foto=cliente.foto,
+            numero_pedidos=numero_pedidos,
+            rating_repartidor=rating_promedio
+        )

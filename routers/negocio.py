@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from config.database import SessionLocal
 from schemas.negocio import Negocio
 from services.negocio import NegocioService
+from schemas.FilterRequestModel import FilterRequestModel
 
 negocio_router = APIRouter()
 
@@ -50,3 +51,9 @@ def delete_negocio(negocio_id: int, db: Session = Depends(get_db)):
     if success:
         return {"message": "Negocio eliminado"}
     raise HTTPException(status_code=404, detail="Negocio no encontrado")
+
+# Filtrar negocios
+@negocio_router.post("/filtrarNegocios", response_model=list[Negocio])
+def filtrar_negocios(filtros: FilterRequestModel, db=Depends(get_db)):
+    service = NegocioService(db)
+    return service.filtrar_negocios(filtros)

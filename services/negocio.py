@@ -5,7 +5,7 @@ class NegocioService:
     def __init__(self, db) -> None:
         self.db = db
     
-    def get_all(self):
+    def obtener_negocios(self):
         """
         Obtener todos los negocios
         """
@@ -17,17 +17,17 @@ class NegocioService:
         """
         return self.db.query(NegocioModel).filter(NegocioModel.id_negocio == id_negocio).first()
     
-    def create_negocio(self, negocio: Negocio):
-        """
-        Crear un negocio
-        """
-        negocio_data = negocio.model_dump()
+    # def create_negocio(self, negocio: Negocio):
+    #     """
+    #     Crear un negocio
+    #     """
+    #     negocio_data = negocio.model_dump()
 
-        new_negocio = NegocioModel(**negocio_data)
-        self.db.add(new_negocio)
-        self.db.commit()
-        self.db.refresh(new_negocio)
-        return new_negocio
+    #     new_negocio = NegocioModel(**negocio_data)
+    #     self.db.add(new_negocio)
+    #     self.db.commit()
+    #     self.db.refresh(new_negocio)
+    #     return new_negocio
     
     def update_negocio(self, id_negocio: int, data: Negocio):
         """
@@ -61,3 +61,33 @@ class NegocioService:
         result = self.db.query(NegocioModel).filter(NegocioModel.id_negocio == id_negocio).delete()
         self.db.commit()
         return result
+    
+    # registrar negocio
+    def registrar_negocio(self, negocio: Negocio):
+        """
+        Crear un negocio
+        """
+        negocio_data = negocio.model_dump()
+
+        new_negocio = NegocioModel(**negocio_data)
+        self.db.add(new_negocio)
+        self.db.commit()
+        self.db.refresh(new_negocio)
+        return new_negocio
+    
+    # filtrar negocios
+    def filtrar_negocios(self, filtros):
+        query = self.db.query(NegocioModel)
+
+        # FILTRO POR CATEGORÍA
+        if filtros.categoria:
+            query = query.filter(NegocioModel.categoria.ilike(f"%{filtros.valor}%"))
+
+        # FILTRO POR TEXTO (nombre, descripción, etc.)
+        if filtros.texto:
+            query = query.filter(
+                (NegocioModel.nombre.ilike(f"%{filtros.valor}%")) |
+                (NegocioModel.descripcion.ilike(f"%{filtros.valor}%"))
+            )
+
+        return query.all()
