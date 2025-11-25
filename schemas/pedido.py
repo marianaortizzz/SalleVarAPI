@@ -14,6 +14,9 @@ class Pedido(BaseModel):
     status_rep: str
     id_cliente: str
     id_negocio: str
+    subtotal: float
+    costo_envio: float
+    costo_servicio: float
     monto_total: float
     status_pago: str
     rating_pedido: Optional[int] = None
@@ -37,6 +40,9 @@ class Pedido(BaseModel):
                 "status_rep": "Asignado",
                 "id_cliente": "cliente123",
                 "id_negocio": "negocio456",
+                "subtotal": 35.00,
+                "costo_envio": 5.00,
+                "costo_servicio": 5.75,
                 "monto_total": 45.75,
                 "status_pago": "Pagado",
                 "rating_pedido": 5,
