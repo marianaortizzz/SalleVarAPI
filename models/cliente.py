@@ -15,3 +15,5 @@ class Cliente(Base):
     telefono = Column(String(15))
     edificio = Column(String(1))
     salon = Column(SmallInteger)
+    calificacion_cliente = Column(SmallInteger)
+    calificacion_repartidor = Column(SmallInteger)

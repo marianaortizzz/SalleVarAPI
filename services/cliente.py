@@ -105,3 +105,31 @@ class ClienteService:
             numero_pedidos=numero_pedidos,
             rating_repartidor=rating_promedio
         )
+    
+    #Calificar cliente
+    def calificar_como_cliente(self, id_cliente: int, calificacion: int):
+        cliente = self.db.query(ClienteModel).filter(ClienteModel.id_cliente == id_cliente).first()
+
+        if not cliente:
+            return False
+        nueva_calificacion = (calificacion + cliente.calificacion_cliente) / 2
+        cliente.calificacion_cliente = nueva_calificacion
+
+        self.db.commit()
+        self.db.refresh(cliente)
+        return True
+    
+    #Calificar repartidor
+    def calificar_como_repartidor(self, id_repartidor: int, calificacion: int):
+        repartidor = self.db.query(ClienteModel).filter(ClienteModel.id_cliente == id_repartidor, ClienteModel.repartidor == True).first()
+
+        if not repartidor:
+            return False
+        
+        nueva_calificacion = (calificacion + repartidor.calificacion_repartidor) / 2
+        
+        repartidor.calificacion_repartidor = nueva_calificacion
+
+        self.db.commit()
+        self.db.refresh(repartidor)
+        return True

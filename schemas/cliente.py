@@ -11,6 +11,8 @@ class Cliente(BaseModel):
     telefono: str = Field(min_length=7, max_length=15)
     edificio : str = Field(min_length=1, max_length=1)
     salon : int = Field(ge=1, le=999)
+    calificacion_cliente: int | None = Field(default=None)
+    calificacion_repartidor: int | None = Field(default=None)
 
     class Config:
         json_schema = {
@@ -25,6 +27,8 @@ class Cliente(BaseModel):
                 "foto": "perfil1.jpg",
                 "telefono": "5551234567", 
                 "edificio": "A",
-                "salon": 101
+                "salon": 101,
+                "calificacion_cliente": 5,
+                "calificacion_repartidor": None
             }
         }

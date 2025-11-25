@@ -93,4 +93,20 @@ def obtener_info_repartidor(id_usuario: int, db: Session = Depends(get_db)):
 
     return service.convert_to_repartidor(cliente)
 
-# 
+
+#Calificar como cliente
+@cliente_router.post("/calificarComoCliente/{id_cliente}/{calificacion}", tags=["Clientes"])
+def calificar_como_cliente(id_cliente: int, calificacion: int, db: Session= Depends(get_db)):
+        service = ClienteService(db)
+        success = service.calificar_como_cliente(id_cliente, calificacion)
+        if success:
+            return {"message": "Calificación registrada"}
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+# Calificar como repartidor
+@cliente_router.post("/calificarComoRepartidor/{id_repartidor}/{calificacion}", tags=["Clientes"])
+def calificar_como_repartidor(id_repartidor: int, calificacion: int, db: Session= Depends(get_db)):
+        service = ClienteService(db)
+        success = service.calificar_como_repartidor(id_repartidor, calificacion)
+        if success:
+            return {"message": "Calificación registrada"}
+        raise HTTPException(status_code=404, detail="Repartidor no encontrado")
