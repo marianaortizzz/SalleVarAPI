@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import List
-from SalleVarAPI.schemas.modificador_producto import ModificadorProducto
+from schemas.modificador_producto import ModificadorProducto
 
 class ProductoMenu(BaseModel):
     id_producto: int

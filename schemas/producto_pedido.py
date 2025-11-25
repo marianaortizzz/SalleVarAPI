@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List
 
 class ProductoPedido(BaseModel):
-    id_producto: str
+    id_producto: int
     nombre: str
     precio: float
     descripcion: str

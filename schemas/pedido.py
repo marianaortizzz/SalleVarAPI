@@ -3,8 +3,8 @@ from typing import Literal
 from datetime import date
 from decimal import Decimal
 from typing import List, Optional
-from SalleVarAPI.schemas.producto_pedido import ProductoPedido
-from SalleVarAPI.schemas.repartidor import Repartidor
+from schemas.producto_pedido import ProductoPedido
+from schemas.repartidor import Repartidor
 
 class Pedido(BaseModel):
     id_pedido: int
@@ -12,8 +12,8 @@ class Pedido(BaseModel):
     status_general: str
     status_rest: str
     status_rep: str
-    id_cliente: str
-    id_negocio: str
+    id_cliente: int
+    id_negocio: int
     subtotal: float
     costo_envio: float
     costo_servicio: float

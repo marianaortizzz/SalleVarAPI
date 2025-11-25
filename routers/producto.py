@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from sqlalchemy.orm import Session
-from SalleVarAPI.schemas.producto_menu import ProductoMenu
+from schemas.producto_menu import ProductoMenu
 from config.database import SessionLocal
 from schemas.producto import Producto
 from services.producto import ProductoService
