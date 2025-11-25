@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from sqlalchemy.orm import Session
+from SalleVarAPI.schemas.producto_menu import ProductoMenu
 from config.database import SessionLocal
 from schemas.producto import Producto
 from services.producto import ProductoService
@@ -16,28 +17,21 @@ def get_db():
         db.close()
 
 # Obtener todos los productos
-@producto_router.get("/productos", tags=["Productos"], response_model=List[Producto])
-def get_productos(db: Session = Depends(get_db)):
-    productos = ProductoService(db).get_all()
+@producto_router.get("/obtenerMenu", tags=["Productos"], response_model=List[ProductoMenu])
+def get_productos(id_restaurante: int, db: Session = Depends(get_db)):
+    productos = ProductoService(db).get_menu(id_restaurante)
     return productos
 
-# Obtener un producto por ID
-@producto_router.get("/productos/{id_producto}", tags=["Productos"], response_model=Producto)
-def get_producto(id_producto: int, db: Session = Depends(get_db)):
-    producto = ProductoService(db).get_by_id(id_producto)
-    if producto:
-        return producto
-    raise HTTPException(status_code=404, detail="Producto no encontrado")
 
 # Crear un nuevo producto
-@producto_router.post("/productos", tags=["Productos"], response_model=Producto, status_code=201)
-def create_producto(producto: Producto, db: Session = Depends(get_db)):
-    nuevo_producto = ProductoService(db).create_producto(producto)
-    return nuevo_producto
+@producto_router.post("/agregarProductoAMenu", tags=["Productos"], response_model=ProductoMenu, status_code=201)
+def create_producto(producto: ProductoMenu, db: Session = Depends(get_db)):
+    producto_modificado = ProductoService(db).create_producto(producto)
+    return producto_modificado
 
 # Actualizar un producto existente
-@producto_router.put("/productos/{id_producto}", tags=["Productos"], response_model=Producto)
-def update_producto(id_producto: int, producto: Producto, db: Session = Depends(get_db)):
+@producto_router.put("/editarProducto/{id_producto}", tags=["Productos"], response_model=ProductoMenu)
+def update_producto(id_producto: int, producto: ProductoMenu, db: Session = Depends(get_db)):
     actualizado = ProductoService(db).update_producto(id_producto, producto)
     if actualizado:
         return actualizado

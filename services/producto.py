@@ -1,31 +1,34 @@
 from models.producto import Producto as ProductoModel
-from schemas.producto import Producto
+from schemas.producto_menu import ProductoMenu
+from models.modificador import ModificadorProducto as ModificadorProductoModel
 
 class ProductoService:
     def __init__(self, db) -> None:
         self.db = db    
-    def get_all(self):
+    def get_menu(self, id_restaurante: int):
         """
         Obtener todos los productos
         """
-        return self.db.query(ProductoModel).all()
-    def get_by_id(self, id_producto: int):
-        """
-        Obtener producto por id
-        """
-        return self.db.query(ProductoModel).filter(ProductoModel.id_producto == id_producto).first()
-    def create_producto(self, producto: Producto):
+        productos = self.db.query(ProductoModel).filter(ProductoModel.id_restaurante == id_restaurante).all()
+        productos_with_modifiers = []
+        for producto in productos:
+            productoSchema = ProductoMenu(**producto.__dict__)
+            productoSchema.modificadores = self.db.query(ModificadorProductoModel).filter(ModificadorProductoModel.id_producto == producto.id_producto).all()
+            productos_with_modifiers.append(productoSchema)
+        return productos_with_modifiers
+    
+    def create_producto(self, producto: ProductoMenu):
         """
         Crear un producto
         """
         producto_data = producto.model_dump()
-
         new_producto = ProductoModel(**producto_data)
         self.db.add(new_producto)
         self.db.commit()
         self.db.refresh(new_producto)
         return new_producto
-    def update_producto(self, id_producto: int, data: Producto):
+    
+    def update_producto(self, id_producto: int, data: ProductoMenu):
         """
         Actualizar producto
         """
