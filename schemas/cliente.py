@@ -1,11 +1,12 @@
 from pydantic import BaseModel, Field
 
 class Cliente(BaseModel):
+    id_cliente: int | None = Field(default=None)
     nombre_completo: str = Field(min_length=1, max_length=255)
     matricula: int = Field(ge=1, le=9999)
     carrera: str = Field(min_length=1, max_length=255)
     repartidor: bool
-    negocios_favoritos: list[int] = Field(default=[])
+    negocios_favoritos: list[str] = Field(default=[])
     contrasena: str = Field(min_length=6, max_length=64)
     foto: str | None = Field(default=None, max_length=255)
     telefono: str = Field(min_length=7, max_length=15)

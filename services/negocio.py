@@ -41,17 +41,25 @@ class NegocioService:
 
         if not negocio:
             return None
-
+        
+        # Asignación de datos
         negocio.nombre = data.nombre
-        negocio.categoria = data.categoria
+        # negocio.categoria = data.categoria  <-- BORRA ESTA LÍNEA (Error: no existe)
+        
         negocio.rating = data.rating
         negocio.rango_precios = data.rango_precios
         negocio.ubicacion = data.ubicacion
         negocio.nombre_responsable = data.nombre_responsable
         negocio.telefono = data.telefono
-        negocio.categorias = data.categorias
+        
+        negocio.categorias = data.categorias # <-- ESTA ES LA CORRECTA
+        
         negocio.imagen = data.imagen
-        negocio.horario_atencion = data.horario_atencion
+        
+        # CORRIGE ESTO TAMBIÉN (Deben ser dos campos, no "horario_atencion"):
+        negocio.horario_apertura = data.horario_apertura 
+        negocio.horario_cierre = data.horario_cierre
+        
         negocio.activo = data.activo
 
         self.db.commit()
