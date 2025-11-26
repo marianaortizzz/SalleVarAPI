@@ -4,6 +4,7 @@ from config.database import Base
 from sqlalchemy import (
     Column, Integer, ForeignKey, String, func
 )
+from models.opcion import OpcionModificador
 
 
 class ModificadorProducto(Base):
