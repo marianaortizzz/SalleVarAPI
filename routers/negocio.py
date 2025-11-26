@@ -19,7 +19,7 @@ def get_db():
 #Obtener todos los negocios
 @negocio_router.get("/negocios", tags=["Negocios"], response_model=List[Negocio])
 def get_negocios(db: Session = Depends(get_db)):
-    negocios = NegocioService(db).get_all()
+    negocios = NegocioService(db).obtener_negocios()
     return negocios
 
 #Obtener negocio por ID
@@ -33,7 +33,7 @@ def get_negocio(negocio_id: int, db: Session = Depends(get_db)):
 #Crear nuevo negocio
 @negocio_router.post("/negocios", tags=["Negocios"], response_model=Negocio, status_code=201)
 def create_negocio(negocio: Negocio, db: Session = Depends(get_db)):
-    nuevo_negocio = NegocioService(db).create_negocio(negocio)
+    nuevo_negocio = NegocioService(db).registrar_negocio(negocio)
     return nuevo_negocio
 
 #Actualizar negocio existente

@@ -3,7 +3,7 @@ from typing import Literal, Optional
 from datetime import time
 
 class Negocio(BaseModel):
-    id_negocio: int = Field(..., description="Identificador único del negocio")
+    id_negocio: int | None = Field(default=None)
     nombre: str = Field(..., description="Nombre del negocio")
     rating: Optional[float] = Field(None, description="Rating del negocio")
     rango_precios: Optional[str] = Field(None, description="Rango de precios del negocio")
