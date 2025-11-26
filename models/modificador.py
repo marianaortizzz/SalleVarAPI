@@ -7,10 +7,16 @@ from sqlalchemy import (
 
 
 class ModificadorProducto(Base):
-    __tablename__ = "modificador__producto"
+    __tablename__ = "modificador_producto"
 
     id_modificador = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nombre_modificador = Column(String(255), nullable=False)
     num_max_selec = Column(Integer, nullable=False, default=1)
-    opciones = relationship("OpcionModificador", backref="modificador", cascade="all, delete-orphan")
+    opciones = relationship(
+        "OpcionModificador", 
+        back_populates="opciones_modificador", 
+        cascade="all, delete-orphan"
+    )
     id_producto = Column(Integer, ForeignKey("producto.id_producto", ondelete="CASCADE"), nullable=False)
+
+

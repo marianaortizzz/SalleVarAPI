@@ -26,3 +26,4 @@ class OpcionModificador(Base):
     modificador_id = Column(
         Integer, ForeignKey("modificador_producto.id_modificador", ondelete="CASCADE"), nullable=False
     )
+    modificador = relationship("ModificadorProducto", back_populates="opciones")
