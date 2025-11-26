@@ -3,6 +3,7 @@ from typing import Literal
 from datetime import date
 from decimal import Decimal
 from typing import List, Optional
+from SalleVarAPI.schemas.cliente import Cliente
 from schemas.producto_pedido import ProductoPedido
 from schemas.repartidor import Repartidor
 
@@ -25,7 +26,7 @@ class Pedido(BaseModel):
     codigo_restaurante: str
     codigo_repartidor: str
     delivery: bool
-    repartidor: Optional[Repartidor] = None
+    repartidor: Optional[Cliente] = None
     para_llevar: bool
     comentarios: str
     productos: List[ProductoPedido]
