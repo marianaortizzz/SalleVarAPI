@@ -26,5 +26,3 @@ class Pedido(Base):
     comentarios = Column(String(255), nullable=True)
     delivery = Column(Boolean, default=True)
 
-    productos = relationship("ProductoPedido", back_populates="pedido")
-    repartidor = relationship("Repartidor", back_populates="pedidos")

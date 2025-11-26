@@ -43,14 +43,14 @@ def update_pedido(pedido_id: int, nuevo_status: str, db: Session = Depends(get_d
         return actualizado
     raise HTTPException(status_code=404, detail="Pedido no encontrado")
 
-@pedido_router.get("/verificarCodigoRestaurante/{pedido_id}", tags=["Pedidos"], response_model=Pedido)
+@pedido_router.post("/verificarCodigoRestaurante/{pedido_id}", tags=["Pedidos"], response_model=bool)
 def get_pedido(pedido_id: int, codigo1: int, codigo2: int, db: Session = Depends(get_db)):
     pedido = PedidoService(db).verificar_codigo_rest(pedido_id, codigo1, codigo2)
     if pedido:
         return pedido
     raise HTTPException(status_code=404, detail="Pedido no encontrado")
 
-@pedido_router.get("/verificarCodigoRepartidor/{pedido_id}", tags=["Pedidos"], response_model=Pedido)
+@pedido_router.post("/verificarCodigoRepartidor/{pedido_id}", tags=["Pedidos"], response_model=bool)
 def get_pedido(pedido_id: int, codigo1: int, codigo2: int, db: Session = Depends(get_db)):
     pedido = PedidoService(db).verificar_codigo_rep(pedido_id, codigo1, codigo2)
     if pedido:
