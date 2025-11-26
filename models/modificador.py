@@ -15,7 +15,7 @@ class ModificadorProducto(Base):
     num_max_selec = Column(Integer, nullable=False, default=1)
     opciones = relationship(
         "OpcionModificador", 
-        back_populates="opciones_modificador", 
+        back_populates="modificador", 
         cascade="all, delete-orphan"
     )
     id_producto = Column(Integer, ForeignKey("producto.id_producto", ondelete="CASCADE"), nullable=False)
