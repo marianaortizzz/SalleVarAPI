@@ -14,6 +14,7 @@ class Pedido(BaseModel):
     status_rep: str
     id_cliente: int
     id_negocio: int
+    id_repartidor: Optional[int] = None
     subtotal: float
     costo_envio: float
     costo_servicio: float
