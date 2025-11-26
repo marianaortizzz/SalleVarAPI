@@ -93,13 +93,12 @@ class NegocioService:
 
         # FILTRO POR CATEGORÍA
         if filtros.categoria:
-            query = query.filter(NegocioModel.categoria.ilike(f"%{filtros.valor}%"))
+            query = query.filter(NegocioModel.categorias.ilike(f"%{filtros.valor}%"))
 
         # FILTRO POR TEXTO (nombre, descripción, etc.)
         if filtros.texto:
             query = query.filter(
-                (NegocioModel.nombre.ilike(f"%{filtros.valor}%")) |
-                (NegocioModel.descripcion.ilike(f"%{filtros.valor}%"))
+                (NegocioModel.nombre.ilike(f"%{filtros.valor}%"))
             )
 
         return query.all()
@@ -128,7 +127,7 @@ class NegocioService:
 
         # TOTAL INGRESOS
         ingresos_totales = (
-            self.db.query(func.sum(PedidoModel.total))
+            self.db.query(func.sum(PedidoModel.monto_total))
             .filter(PedidoModel.id_negocio == id_negocio)
             .scalar()
         ) or 0

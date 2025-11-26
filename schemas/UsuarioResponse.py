@@ -6,7 +6,7 @@ class UsuarioResponse(BaseModel):
     nombre_completo: str
     matricula: int
     carrera: str
-    negocio_favorito: str
+    negocio_favorito: list[str] | None
     foto: str | None
     telefono: str
     edificio: str
