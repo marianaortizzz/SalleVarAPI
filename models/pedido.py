@@ -26,3 +26,14 @@ class Pedido(Base):
     comentarios = Column(String(255), nullable=True)
     delivery = Column(Boolean, default=True)
 
+    detalles = relationship(
+        "DetallePedido",
+        back_populates="pedido",
+        cascade="all, delete-orphan"
+    )
+
+    productos = relationship(
+        "Producto",
+        secondary="detalle_pedido", 
+        back_populates="pedidos"
+    )

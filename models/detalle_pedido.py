@@ -1,5 +1,6 @@
 from config.database import Base
 from sqlalchemy import Column, Integer, DECIMAL, ForeignKey, String
+from sqlalchemy.orm import relationship
 
 class DetallePedido(Base):
     __tablename__ = "detalle_pedido"
@@ -13,3 +14,7 @@ class DetallePedido(Base):
     opciones = Column(String(255), nullable=True)
     comentarios = Column(String(255), nullable=True)
     total_producto = Column(DECIMAL(10, 2))
+    pedido = relationship("Pedido", back_populates="detalles")
+
+    # Relationship to the Producto object
+    producto = relationship("Producto", back_populates="detalles_pedido")
