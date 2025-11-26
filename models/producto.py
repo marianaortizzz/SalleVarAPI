@@ -26,3 +26,8 @@ class Producto(Base):
         secondary="detalle_pedido", 
         back_populates="productos"
     )
+    modificadores = relationship(
+        "ModificadorProducto",
+        back_populates="producto",
+        cascade="all, delete-orphan"
+    )

@@ -76,8 +76,11 @@ def mostrar_info_usuario(id_usuario: int, db: Session = Depends(get_db)):
     service = ClienteService(db)
     cliente = service.get_by_id(id_usuario)
 
-    if not cliente or cliente.repartidor:
+    if not cliente:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    if cliente.repartidor:
+        raise HTTPException(status_code=400, detail="El usuario es un repartidor, use el endpoint correspondiente")
 
     return service.convert_to_usuario(cliente)
 
@@ -88,8 +91,11 @@ def obtener_info_repartidor(id_usuario: int, db: Session = Depends(get_db)):
     service = ClienteService(db)
     cliente = service.get_by_id(id_usuario)
 
-    if not cliente or not cliente.repartidor:
+    if not cliente:
         raise HTTPException(status_code=404, detail="Repartidor no encontrado")
+    
+    if not cliente.repartidor:
+        raise HTTPException(status_code=400, detail="El usuario no es un repartidor")
 
     return service.convert_to_repartidor(cliente)
 

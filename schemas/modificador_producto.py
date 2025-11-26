@@ -5,6 +5,7 @@ class OpcionModificador(BaseModel):
     id_opcion: int
     nombre: str
     precio_adicional: float
+    descripcion: Optional[str] = None
     disponible: bool
     id_modificador: int
 
@@ -18,6 +19,8 @@ class OpcionModificador(BaseModel):
                 "id_producto": "101"
             }
         }
+        orm_mode = True
+        from_attributes = True
 
 class ModificadorProducto(BaseModel):
     id_modificador: int
@@ -50,3 +53,5 @@ class ModificadorProducto(BaseModel):
                 ]
             }
         }
+        orm_mode = True
+        from_attributes = True

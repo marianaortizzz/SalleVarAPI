@@ -19,5 +19,5 @@ class ModificadorProducto(Base):
         cascade="all, delete-orphan"
     )
     id_producto = Column(Integer, ForeignKey("producto.id_producto", ondelete="CASCADE"), nullable=False)
-
+    producto = relationship("Producto", back_populates="modificadores")
 

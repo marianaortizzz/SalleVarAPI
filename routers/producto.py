@@ -26,7 +26,7 @@ def get_productos(id_restaurante: int, db: Session = Depends(get_db)):
 # Crear un nuevo producto
 @producto_router.post("/agregarProductoAMenu", tags=["Productos"], response_model=ProductoMenu, status_code=201)
 def create_producto(producto: ProductoMenu, db: Session = Depends(get_db)):
-    producto_modificado = ProductoService(db).create_producto(producto)
+    producto_modificado = ProductoService(db).create_producto_completo(producto)
     return producto_modificado
 
 # Actualizar un producto existente

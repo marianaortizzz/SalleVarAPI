@@ -65,14 +65,14 @@ class ClienteService:
     # LOGIN
     def login(self, login_data: LoginRequest):
         usuario = self.db.query(ClienteModel).filter(
-            (ClienteModel.telefono == login_data.usuario) |
+            (ClienteModel.nombre_completo == login_data.usuario) |
             (ClienteModel.matricula == login_data.usuario)
         ).first()
 
-        if usuario is None:
+        if not usuario:
             return None
         
-        if usuario.contrasena != login_data.contraseña:
+        if usuario.contrasena != login_data.contrasena:
             return False
 
         return usuario
