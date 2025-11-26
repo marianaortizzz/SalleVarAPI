@@ -12,7 +12,7 @@ class Pedido(Base):
     status_rep = Column(Enum('Asignado', 'En_camino', 'Entregado'))
     id_cliente = Column(Integer, ForeignKey('cliente.id_cliente'))
     id_negocio = Column(Integer, ForeignKey('negocio.id_negocio'))
-    id_repartidor = Column(Integer, ForeignKey('repartidor.id_repartidor'), nullable=True)
+    id_repartidor = Column(Integer,ForeignKey('cliente.id_cliente'), nullable=True)
     subtotal = Column(DECIMAL(10, 2))
     costo_envio = Column(DECIMAL(10, 2))
     costo_servicio = Column(DECIMAL(10, 2))
