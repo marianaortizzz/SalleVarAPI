@@ -24,5 +24,5 @@ class OpcionModificador(Base):
     precio = Column(Numeric(10, 2), nullable=False, default=0)
     disponible = Column(Boolean, nullable=False, default=True)
     modificador_id = Column(
-        Integer, ForeignKey("modificadores_producto.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("modificador_producto.id_modificador", ondelete="CASCADE"), nullable=False
     )
