@@ -5,6 +5,8 @@ from config.database import SessionLocal
 from schemas.negocio import Negocio
 from services.negocio import NegocioService
 from schemas.FilterRequestModel import FilterRequestModel
+from schemas.LoginRequest import LoginRequest
+from schemas.LoginResponse import LoginResponse
 
 negocio_router = APIRouter()
 
@@ -69,10 +71,14 @@ def obtener_estadisticas_negocio(id_negocio: int, db: Session = Depends(get_db))
     return estadisticas
 
 # LOGIN NEGOCIO
-@negocio_router.post("/negocios/login", response_model=Negocio, tags=["Negocios"])
-def login_negocio(nombre: str, contrasena: str, db: Session = Depends(get_db)):
-    servicio = NegocioService(db)
-    negocio = servicio.login_negocio(nombre, contrasena)
-    if negocio:
-        return negocio
-    raise HTTPException(status_code=401, detail="Credenciales inválidas")
+@negocio_router.post("/negocios/login", response_model=LoginResponse, tags=["Negocios"])
+def login_negocio(data: LoginRequest, db: Session = Depends(get_db)):
+    service = NegocioService(db)
+    usuario = service.login_negocio(data)
+
+    if usuario is None:
+        return LoginResponse(status_code=401, mensaje="Credenciales inválidas")
+    if usuario is False:
+        return LoginResponse(status_code=404, mensaje="Negocio no encontrado")
+    
+    return LoginResponse(status_code=200, id_usuario=usuario.id_negocio, mensaje="Login exitoso")
