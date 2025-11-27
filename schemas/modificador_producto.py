@@ -1,57 +1,66 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 
-class OpcionModificador(BaseModel):
-    id_opcion: int
+class OpcionModificadorBase(BaseModel):
     nombre: str
-    precio_adicional: float
+    precio: float
     descripcion: Optional[str] = None
     disponible: bool
-    id_modificador: int
 
     class Config:
         json_schema = {
             "example": {
-                "id_opcion": "1",
                 "nombre": "Grande",
-                "precio_adicional": 2.0,
+                "precio": 2.0,
                 "disponible": True,
-                "id_producto": "101"
+                "descripcion": "Tamaño grande del producto"
             }
         }
-        orm_mode = True
         from_attributes = True
 
-class ModificadorProducto(BaseModel):
-    id_modificador: int
-    nombre_modificador: str
-    num_max_selec: int
-    opciones: List[OpcionModificador]
+
+class OpcionModificadorCreate(OpcionModificadorBase):
+    pass
+
+class OpcionModificadorUpdate(BaseModel):
+    nombre: Optional[str] = None
+    precio: Optional[float] = None
+    descripcion: Optional[str] = None
+    disponible: Optional[bool] = None
+
+class OpcionModificador(OpcionModificadorBase):
+    id: int
     id_producto: int
 
+    model_config= ConfigDict(from_attributes=True)
+
+
+
+class ModificadorProductoBase(BaseModel):
+    nombre_modificador: str
+    num_max_selec: int
+
     class Config:
         json_schema = {
             "example": {
-                "id_modificador": "1",
                 "nombre_modificador": "Tamaño",
-                "num_max_selec": 1,
-                "opciones": [
-                    {
-                        "id_opcion": "1",
-                        "nombre": "Pequeño",
-                        "precio_adicional": 0.0,
-                        "disponible": True,
-                        "id_producto": "101"
-                    },
-                    {
-                        "id_opcion": "2",
-                        "nombre": "Mediano",
-                        "precio_adicional": 1.0,
-                        "disponible": True,
-                        "id_producto": "101"
-                    }
-                ]
+                "num_max_selec": 1
             }
         }
-        orm_mode = True
         from_attributes = True
+
+class ModificadorProductoCreate(ModificadorProductoBase):
+    pass
+
+class ModificadorProductoUpdate(BaseModel):
+    nombre_modificador: Optional[str] = None
+    num_max_selec: Optional[int] = None
+    opciones: Optional[List[OpcionModificadorUpdate]] = None
+
+class ModificadorProducto(ModificadorProductoBase):
+    id: int
+    id_producto: int
+    opciones: List[OpcionModificador] = []
+
+    model_config = ConfigDict(from_attributes=True)
+

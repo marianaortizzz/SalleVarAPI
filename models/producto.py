@@ -16,16 +16,17 @@ class Producto(Base):
     id_negocio = Column(Integer, ForeignKey('negocio.id_negocio'), nullable=True)
     negocio = relationship('Negocio', back_populates='productos')
     
-    detalles_pedido = relationship(
+    detalles = relationship(
         "DetallePedido",
         back_populates="producto"
     )
-    
+
     pedidos = relationship(
         "Pedido",
         secondary="detalle_pedido", 
         back_populates="productos"
     )
+    
     modificadores = relationship(
         "ModificadorProducto",
         back_populates="producto",

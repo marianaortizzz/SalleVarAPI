@@ -1,67 +1,127 @@
+from datetime import datetime
+from decimal import Decimal
+from typing import List
+from models.detalle_pedido import DetallePedido
 from models.pedido import Pedido as PedidoModel
-from schemas.pedido import Pedido
-
+from schemas.pedido import Pedido as PedidoSchema
+from schemas.pedido import PedidoCreate
+from schemas.detalle_pedido import DetallePedidoCreate
+from models.detalle_pedido import DetallePedido as DetallePedidoModel
+from sqlalchemy.orm import joinedload as joinLoaded
 class PedidoService:
     def __init__(self, db) -> None:
         self.db = db
-    
-    def get_all(self, id: int, tipo_cuenta: str, status: str):
+    def get_all(self, id: int, tipo_cuenta: str, status: str) -> List[PedidoSchema]:
+        """
+        Obtiene todos los pedidos asociados a un ID específico según el tipo de cuenta y el estado general.
+        """
         if tipo_cuenta == "cliente":
-            return self.db.query(PedidoModel).filter(PedidoModel.id_cliente == id, PedidoModel.status_general == status).all()
+            return self.db.query(PedidoModel).filter(
+                PedidoModel.id_cliente == id, 
+                PedidoModel.status_general == status
+            ).options(joinLoaded(PedidoModel.detalles)).all()
         elif tipo_cuenta == "negocio":
-            return self.db.query(PedidoModel).filter(PedidoModel.id_negocio == id, PedidoModel.status_general == status).all()
+            return self.db.query(PedidoModel).filter(
+                PedidoModel.id_negocio == id, 
+                PedidoModel.status_rest == status
+            ).options(joinLoaded(PedidoModel.detalles)).all()
         elif tipo_cuenta == "repartidor":
-            return self.db.query(PedidoModel).filter(PedidoModel.id_repartidor == id, PedidoModel.status_general == status).all()
+            return self.db.query(PedidoModel).filter(
+                PedidoModel.id_repartidor == id, 
+                PedidoModel.status_rep == status
+            ).options(joinLoaded(PedidoModel.detalles)).all()
         else:
-            return self.db.query(PedidoModel).all()
+            return []
     
-    def get_by_id(self, campo: int):
-        return self.db.query(PedidoModel).filter(PedidoModel.campo == campo).first()
+    def get_by_id(self, pedido_id: int) -> PedidoSchema:
+        """
+        Obtiene un pedido por su ID.
+        """
+        return self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).options(joinLoaded(PedidoModel.detalles)).first()
     
-    def create_pedido(self, pedido: Pedido):
-        pedido_data = pedido.model_dump()
+    def create_pedido(self, pedido_data: PedidoCreate) -> PedidoSchema:
+        """
+        Crea un nuevo pedido, incluyendo los registros en DetallePedido.
+        """
+        detalles_data: List[DetallePedidoCreate] = pedido_data.detalles
+        pedido_fields = pedido_data.model_dump(exclude={"detalles"})
+        db_pedido = PedidoModel(**pedido_fields) 
+        for detalle_in in detalles_data:
+            db_detalle = DetallePedidoModel(**detalle_in.model_dump())
+            db_pedido.detalles.append(db_detalle)
 
-        new_pedido = PedidoModel(**pedido_data)
-        self.db.add(new_pedido)
-        self.db.commit()
-        self.db.refresh(new_pedido)
-        return new_pedido
+        self.db.add(db_pedido)
+        self.db.commit() 
+        self.db.refresh(db_pedido) 
+
+        return db_pedido
     
-    def update_pedido(self, campo: int, nuevo_status: str):
-        pedido = self.db.query(PedidoModel).filter(PedidoModel.campo == campo).first()
+    def update_pedido_status(self, pedido_id: int, nuevo_status: str, tipo_cuenta: str) -> PedidoSchema:
+        """
+        Actualiza el estado general de un pedido por su ID.
+        """
+        if tipo_cuenta == "negocio":
+            pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
+            if not pedido:
+                return None
+            pedido.status_rest = nuevo_status
+            self.db.commit()
+            self.db.refresh(pedido)
+        elif tipo_cuenta == "repartidor":
+            pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
+            if not pedido:
+                return None
+            pedido.status_rep = nuevo_status
+            self.db.commit()
+            self.db.refresh(pedido)
+        elif tipo_cuenta == "cliente":
+            pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
+            if not pedido:
+                return None
+            pedido.status_general = nuevo_status
+            self.db.commit()
+            self.db.refresh(pedido)
+        else:
+            return None
+        
+    
+    def verificar_codigo_rest(self, pedido_id: int, codigo_rest: str, codigo_rep: str) -> bool:
+        """
+        Verifica el código del restaurante y el del repartidor para un pedido específico.
+        Los códigos se esperan como strings (str).
+        """
+        pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
 
         if not pedido:
-            return None
+            return False
         
-        pedido.status_general = nuevo_status
-
-        self.db.commit()
-        self.db.refresh(pedido)
-        return pedido
-    
-    def verificar_codigo_rest(self, campo: int, codigo1: int, codigo2: int):
-        pedido = self.db.query(PedidoModel).filter(PedidoModel.campo == campo).first()
+        # Comparación de códigos como strings
+        if str(pedido.codigo_rest) == codigo_rest and str(pedido.codigo_rep) == codigo_rep:
+            return True
+        else:
+            return False
+        
+    def verificar_codigo_rep(self, pedido_id: int, codigo_rep: str, codigo_rest: str) -> bool:
+        """
+        Verifica el código del repartidor y el del restaurante para un pedido específico.
+        Los códigos se esperan como strings (str).
+        """
+        pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
 
         if not pedido:
-            return None
+            return False
         
-        if pedido.codigo_rest == codigo1 and pedido.codigo_rep == codigo2:
-            return pedido
+        # Comparación de códigos como strings
+        if str(pedido.codigo_rep) == codigo_rep and str(pedido.codigo_rest) == codigo_rest:
+            return True
         else:
-            return None
-        
-    def verificar_codigo_rep(self, campo: int, codigo1: int, codigo2: int):
-        pedido = self.db.query(PedidoModel).filter(PedidoModel.campo == campo).first()
-
-        if not pedido:
-            return None
-        
-        if pedido.codigo_rep == codigo1 and pedido.codigo_rest == codigo2:
-            return pedido
-        else:
-            return None
+            return False
     
-    def delete_pedido(self, campo: int):
-        result = self.db.query(PedidoModel).filter(PedidoModel.campo == campo).delete()
+    def delete_pedido(self, pedido_id: int) -> int:
+        """
+        Elimina un pedido por su ID. La cascada eliminará los detalles asociados.
+        Retorna el número de filas eliminadas (0 o 1).
+        """
+        result = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).delete(synchronize_session=False)
         self.db.commit()
         return result
