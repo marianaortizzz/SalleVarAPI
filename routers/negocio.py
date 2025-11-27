@@ -5,6 +5,8 @@ from config.database import SessionLocal
 from schemas.negocio import Negocio
 from services.negocio import NegocioService
 from schemas.FilterRequestModel import FilterRequestModel
+from schemas.LoginRequest import LoginRequest
+from schemas.LoginResponse import LoginResponse
 
 negocio_router = APIRouter()
 
@@ -53,17 +55,30 @@ def delete_negocio(negocio_id: int, db: Session = Depends(get_db)):
     raise HTTPException(status_code=404, detail="Negocio no encontrado")
 
 # Filtrar negocios
-@negocio_router.post("/filtrarNegocios", response_model=list[Negocio])
+@negocio_router.post("/filtrarNegocios", response_model=list[Negocio], tags=["Negocios"])
 def filtrar_negocios(filtros: FilterRequestModel, db=Depends(get_db)):
     service = NegocioService(db)
     return service.filtrar_negocios(filtros)
 
 
 # Obtener estadísticas de un negocio
-@negocio_router.get("/negocios/{id_negocio}/estadisticas", response_model=dict)
+@negocio_router.get("/negocios/{id_negocio}/estadisticas", response_model=dict, tags=["Negocios"])
 def obtener_estadisticas_negocio(id_negocio: int, db: Session = Depends(get_db)):
     service = NegocioService(db)
     estadisticas = service.obtener_estadistica_negocio(id_negocio)
     if estadisticas is None:
         raise HTTPException(status_code=404, detail="Negocio no encontrado")
     return estadisticas
+
+# LOGIN NEGOCIO
+@negocio_router.post("/negocios/login", response_model=LoginResponse, tags=["Negocios"])
+def login_negocio(data: LoginRequest, db: Session = Depends(get_db)):
+    service = NegocioService(db)
+    usuario = service.login_negocio(data)
+
+    if usuario is None:
+        return LoginResponse(status_code=401, mensaje="Credenciales inválidas")
+    if usuario is False:
+        return LoginResponse(status_code=404, mensaje="Negocio no encontrado")
+    
+    return LoginResponse(status_code=200, id_usuario=usuario.id_negocio, mensaje="Login exitoso")

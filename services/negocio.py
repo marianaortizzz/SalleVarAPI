@@ -3,6 +3,7 @@ from models.negocio import Negocio as NegocioModel
 from schemas.negocio import Negocio
 from models.pedido import Pedido as PedidoModel
 from models.detalle_pedido import DetallePedido as DetallePedidoModel  # OPCIONAL
+from schemas.LoginRequest import LoginRequest
 
 
 class NegocioService:
@@ -154,4 +155,21 @@ class NegocioService:
             "productos_vendidos": productos_vendidos,
             "rating": rating
         }
+    
+    # LOGIN NEGOCIO
+    def login_negocio(self, login_data: LoginRequest):
+        """
+        Login de negocio
+        """
+        usuario = self.db.query(NegocioModel).filter(
+            (NegocioModel.nombre == login_data.usuario)
+        ).first()
+
+        if not usuario:
+            return None
+        
+        if usuario.contrasena != login_data.contrasena:
+            return False
+
+        return usuario
 

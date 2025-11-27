@@ -5,6 +5,7 @@ from datetime import time
 class Negocio(BaseModel):
     id_negocio: int | None = Field(default=None)
     nombre: str = Field(..., description="Nombre del negocio")
+    contrasena: Optional[str] = Field(None, description="Contraseña del negocio")
     rating: Optional[float] = Field(None, description="Rating del negocio")
     rango_precios: Optional[str] = Field(None, description="Rango de precios del negocio")
     ubicacion: Optional[str] = Field(None, description="Ubicación del negocio")
@@ -22,6 +23,7 @@ class Negocio(BaseModel):
             "example": {
                 "id_negocio": 1,
                 "nombre": "Negocio Ejemplo",
+                "contrasena": "securepassword",
                 "rating": 4.5,
                 "rango_precios": "50-100",
                 "ubicacion": "Calle Falsa 123",
