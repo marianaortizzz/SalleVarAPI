@@ -6,79 +6,55 @@ from typing import List, Optional
 from schemas.cliente import Cliente
 from schemas.producto_pedido import ProductoPedido
 from schemas.repartidor import Repartidor
+from schemas.detalle_pedido import DetallePedidoCreate, DetallePedido, DetallePedidoResponse
+from pydantic import ConfigDict
 
-class Pedido(BaseModel):
+class PedidoBase(BaseModel):
+    fecha_pedido: date
+    subtotal: Decimal = Field(..., decimal_places=2)
+    costo_envio: Decimal = Field(..., decimal_places=2)
+    costo_servicio: Decimal = Field(..., decimal_places=2)
+    monto_total: Decimal = Field(..., decimal_places=2)
+    status_general: Literal['Pendiente', 'En_proceso', 'Completado', 'Cancelado']
+    status_rest: Literal['Pendiente', 'Preparando', 'Listo']
+    status_rep: Literal['Asignado', 'En_camino', 'Entregado']
+    status_pago: Literal['Pendiente', 'Pagado', 'Rechazado']
+    codigo_rest: str
+    codigo_rep: str
+    para_llevar: bool
+    delivery: bool
+    comentarios: Optional[str] = None
+    
+    model_config = ConfigDict(from_attributes=True)
+
+
+class PedidoCreate(PedidoBase):
+    id_cliente: int
+    id_negocio: int
+    detalles: List[DetallePedidoCreate]
+    
+
+class Pedido(PedidoBase):
     id_pedido: int
-    fecha: str 
-    status_general: str
-    status_rest: str
-    status_rep: str
     id_cliente: int
     id_negocio: int
     id_repartidor: Optional[int] = None
-    subtotal: float
-    costo_envio: float
-    costo_servicio: float
-    monto_total: float
-    status_pago: str
-    rating_pedido: Optional[int] = None
-    rating_rep: Optional[int] = None
-    codigo_restaurante: str
-    codigo_repartidor: str
-    delivery: bool
-    repartidor: Optional[Cliente] = None
-    para_llevar: bool
-    comentarios: str
-    productos: List[ProductoPedido]
+    
+    rating_pedido: Optional[Decimal] = Field(None, decimal_places=1)
+    rating_rep: Optional[Decimal] = Field(None, decimal_places=1)
+    
+    detalles: List[DetallePedidoResponse] = []
 
 
-    class Config:
-        json_schema = {
-            "example": {
-                "id_pedido": 1001,
-                "fecha": "2024-10-01T12:30:00",
-                "status_general": "En Proceso",
-                "status_rest": "Preparando",
-                "status_rep": "Asignado",
-                "id_cliente": "cliente123",
-                "id_negocio": "negocio456",
-                "subtotal": 35.00,
-                "costo_envio": 5.00,
-                "costo_servicio": 5.75,
-                "monto_total": 45.75,
-                "status_pago": "Pagado",
-                "rating_pedido": 5,
-                "rating_rep": 4,
-                "codigo_pedido": "PED789",
-                "codigo_rep": "REP101",
-                "repartidor": {
-                    "id_repartidor": "rep123",
-                    "nombre": "Juan Perez",
-                    "telefono": "555-1234",
-                    "vehiculo": "Moto"
-                },
-                "id_repartidor": "rep123",
-                "para_llevar": False,
-                "comentarios": "Por favor, entregar rápido.",
-                "productos": [
-                    {
-                        "id_producto": "prod001",
-                        "nombre": "Hamburguesa",
-                        "precio": 15.50,
-                        "descripcion": "Hamburguesa con queso y tocino",
-                        "cantidad": 2,
-                        "opciones_seleccionadas": ["Extra queso", "Sin cebolla"],
-                        "comentarios_extra": "Bien cocida"
-                    },
-                    {
-                        "id_producto": "prod002",
-                        "nombre": "Papas Fritas",
-                        "precio": 5.25,
-                        "descripcion": "Papas fritas grandes",
-                        "cantidad": 1,
-                        "opciones_seleccionadas": [],
-                        "comentarios_extra": ""
-                    }
-                ]
-            }
-        }
+class PedidoUpdate(BaseModel):
+    fecha_pedido: Optional[date] = None
+    status_general: Optional[Literal['Pendiente', 'En_proceso', 'Completado', 'Cancelado']] = None
+    status_rep: Optional[Literal['Asignado', 'En_camino', 'Entregado']] = None
+    status_rest: Optional[Literal['Pendiente', 'Preparando', 'Listo']] = None
+    id_repartidor: Optional[int] = None
+    rating_pedido: Optional[Decimal] = Field(None, decimal_places=1)
+    rating_rep: Optional[Decimal] = Field(None, decimal_places=1)
+    comentarios: Optional[str] = None
+    
+    # Nota: Los campos de Detalle (productos, subtotales) 
+    # generalmente se actualizan mediante endpoints dedicados o se recrean completamente.
