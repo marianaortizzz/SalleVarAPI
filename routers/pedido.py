@@ -29,6 +29,7 @@ def get_pedido(pedido_id: int, db: Session = Depends(get_db)):
         return pedido
     raise HTTPException(status_code=404, detail="Pedido no encontrado")
 
+
 # Crear nuevo pedido
 @pedido_router.post("/hacerPedido", tags=["Pedidos"], response_model=Pedido, status_code=201)
 def create_pedido(pedido: PedidoCreate, db: Session = Depends(get_db)):

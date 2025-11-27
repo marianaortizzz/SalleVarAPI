@@ -22,7 +22,15 @@ def get_productos(id_restaurante: int, db: Session = Depends(get_db)):
     productos = ProductoService(db).get_menu(id_restaurante)
     return productos
     
-    
+#Obtener producto por id
+@producto_router.get("/obtenerProducto/{id_producto}", tags=["Productos"], response_model=Producto)
+def get_producto(id_producto: int, db: Session = Depends(get_db)):
+    producto = ProductoService(db).obtener_producto_por_id(id_producto)
+    if producto:
+        return producto
+    raise HTTPException(status_code=404, detail="Producto no encontrado")
+
+
 # Crear un nuevo producto
 @producto_router.post("/agregarProductoAMenu", tags=["Productos"], response_model=Producto, status_code=201)
 def create_producto(producto: ProductoCreate, id_negocio: int, db: Session = Depends(get_db)):

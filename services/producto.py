@@ -131,4 +131,9 @@ class ProductoService:
         self.db.commit()
         return result
     
+    def obtener_producto_por_id(self, id_producto: int):
+        """
+        Obtener producto por id
+        """
+        return self.db.query(ProductoModel).filter(ProductoModel.id_producto == id_producto).options(joinedload(ProductoModel.modificadores).joinedload(ModificadorProductoModel.opciones)).first()
     
