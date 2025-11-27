@@ -6,6 +6,7 @@ class Negocio(Base):
 
     id_negocio = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nombre = Column(String(255))
+    contrasena = Column(String(255))
     rating = Column(DECIMAL)
     rango_precios = Column(Enum('0-50', '50-100', '100-150', '150-200', '+200'))
     ubicacion = Column(String(255))

@@ -154,4 +154,19 @@ class NegocioService:
             "productos_vendidos": productos_vendidos,
             "rating": rating
         }
+    
+    # LOGIN NEGOCIO
+    def login_negocio(self, nombre: str, constrasena: str):
+        """
+        Login de negocio
+        """
+        negocio = (
+            self.db.query(NegocioModel)
+            .filter(
+                NegocioModel.nombre == nombre,
+                NegocioModel.constrasena == constrasena
+            )
+            .first()
+        )
+        return negocio
 

@@ -53,17 +53,26 @@ def delete_negocio(negocio_id: int, db: Session = Depends(get_db)):
     raise HTTPException(status_code=404, detail="Negocio no encontrado")
 
 # Filtrar negocios
-@negocio_router.post("/filtrarNegocios", response_model=list[Negocio])
+@negocio_router.post("/filtrarNegocios", response_model=list[Negocio], tags=["Negocios"])
 def filtrar_negocios(filtros: FilterRequestModel, db=Depends(get_db)):
     service = NegocioService(db)
     return service.filtrar_negocios(filtros)
 
 
 # Obtener estadísticas de un negocio
-@negocio_router.get("/negocios/{id_negocio}/estadisticas", response_model=dict)
+@negocio_router.get("/negocios/{id_negocio}/estadisticas", response_model=dict, tags=["Negocios"])
 def obtener_estadisticas_negocio(id_negocio: int, db: Session = Depends(get_db)):
     service = NegocioService(db)
     estadisticas = service.obtener_estadistica_negocio(id_negocio)
     if estadisticas is None:
         raise HTTPException(status_code=404, detail="Negocio no encontrado")
     return estadisticas
+
+# LOGIN NEGOCIO
+@negocio_router.post("/negocios/login", response_model=Negocio, tags=["Negocios"])
+def login_negocio(nombre: str, contrasena: str, db: Session = Depends(get_db)):
+    servicio = NegocioService(db)
+    negocio = servicio.login_negocio(nombre, contrasena)
+    if negocio:
+        return negocio
+    raise HTTPException(status_code=401, detail="Credenciales inválidas")
