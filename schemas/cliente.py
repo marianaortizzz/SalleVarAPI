@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 class Cliente(BaseModel):
     id_cliente: int | None = Field(default=None)
     nombre_completo: str = Field(min_length=1, max_length=255)
-    matricula: int = Field(ge=1, le=9999)
+    matricula: int = Field(ge=1, le=999999)
     carrera: str = Field(min_length=1, max_length=255)
     repartidor: bool
     negocios_favoritos: list[str] = Field(default=[])
