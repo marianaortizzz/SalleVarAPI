@@ -57,10 +57,21 @@ class ClienteService:
         cliente.matricula = data.matricula
         cliente.carrera = data.carrera
         cliente.repartidor = data.repartidor
-        cliente.negocios_favoritos = data.negocios_favoritos
-        cliente.contrasena = data.contrasena
+        
+        if isinstance(data.negocios_favoritos, list):
+             cliente.negocios_favoritos = str(data.negocios_favoritos)
+        else:
+             cliente.negocios_favoritos = data.negocios_favoritos
+
+        # PROTECCIÓN DE CONTRASEÑA 
+        if data.contrasena and len(data.contrasena) >= 6:
+            cliente.contrasena = data.contrasena
+
         cliente.foto = data.foto
         cliente.telefono = data.telefono
+        # Agrega estos si te faltan en la asignación:
+        cliente.edificio = data.edificio
+        cliente.salon = data.salon
 
         self.db.commit()
         self.db.refresh(cliente)
@@ -133,13 +144,46 @@ class ClienteService:
         numero_pedidos = 0
         rating_promedio = 5.0
 
+        # 1. PROCESAR LISTA DE NEGOCIOS FAVORITOS
+        raw = cliente.negocios_favoritos
+        lista_final = []
+
+        if isinstance(raw, list):
+            lista_final = raw
+        elif isinstance(raw, str):
+            clean_raw = raw.strip()
+            
+            if clean_raw == "[]" or clean_raw == "":
+                lista_final = []
+            else:
+                try:
+                    import ast
+                    lista_final = ast.literal_eval(clean_raw)
+                except:
+                    try:
+                        import json
+                        lista_final = json.loads(clean_raw)
+                    except:
+                        lista_final = []
+        
+        if not isinstance(lista_final, list):
+            lista_final = list(lista_final)
+
+        # 2. RETORNO CON TODOS LOS DATOS
         return RepartidorResponse(
             id_usuario=cliente.id_cliente,
             nombre_completo=cliente.nombre_completo,
             telefono=cliente.telefono,
             foto=cliente.foto,
             numero_pedidos=numero_pedidos,
-            rating_repartidor=rating_promedio
+            rating_repartidor=rating_promedio,
+            
+            # CAMPOS NUEVOS (Asegúrate de que RepartidorResponse ya los tenga definidos)
+            matricula=cliente.matricula,
+            carrera=cliente.carrera,
+            edificio=cliente.edificio,
+            salon=cliente.salon,
+            negocios_favoritos=lista_final
         )
     
     #Calificar cliente

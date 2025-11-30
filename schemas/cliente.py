@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 import ast
-from typing import Any
+from typing import Any, Optional
 
 class Cliente(BaseModel):
     id_cliente: int | None = Field(default=None)
@@ -9,11 +9,11 @@ class Cliente(BaseModel):
     carrera: str = Field(min_length=1, max_length=255)
     repartidor: bool
     negocios_favoritos: list[str] = Field(default=[])
-    contrasena: str = Field(min_length=6, max_length=64)
+    contrasena: Optional[str] = Field(default=None, max_length=64)
     foto: str | None = Field(default=None, max_length=255)
     telefono: str = Field(min_length=7, max_length=15)
-    edificio : str = Field(min_length=1, max_length=1)
-    salon : int = Field(ge=1, le=999)
+    edificio : str | None = Field(default=None) 
+    salon : int | None = Field(default=None)
     calificacion_cliente: int | None = Field(default=None)
     calificacion_repartidor: int | None = Field(default=None)
 
@@ -32,6 +32,7 @@ class Cliente(BaseModel):
         return v if v is not None else []
 
     class Config:
+        from_attributes = True
         json_schema = {
             "example": {
                 "id_cliente": 1,
