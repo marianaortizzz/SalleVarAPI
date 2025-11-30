@@ -1,7 +1,8 @@
 from typing import List, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
-from schemas.modificador_producto import ModificadorProductoCreate   
+from schemas.modificador_producto import ModificadorProducto   
+from schemas.modificador_producto import ModificadorProductoCreate
     
 class ProductoBase(BaseModel):
     nombre: str = Field(..., description="Nombre del producto")
@@ -40,23 +41,10 @@ class ProductoUpdate(BaseModel):
 class Producto(ProductoBase):
     id_producto: int = Field(..., description="Identificador único del producto")
     id_negocio: int = Field(..., description="Identificador del negocio asociado al producto")
-    modificadores: List[ModificadorProductoCreate] = Field(..., description="Lista de modificadores asociados al producto.") 
+    modificadores: List[ModificadorProducto] = Field(..., description="Lista de modificadores asociados al producto.") 
 
     model_config = ConfigDict(
-        from_attributes=True,
-        json_schema_extra={
-            "example": {
-                "id_producto": 1,
-                "nombre": "Producto Ejemplo",
-                "precio": 19.99,
-                "descripcion": "Descripción del producto ejemplo",
-                "imagen": "imagen.jpg",
-                "categoria": "Categoría Ejemplo",
-                "disponible": True,
-                "modificadores": [], 
-                "id_negocio": 2
-            }
-        }
+        from_attributes=True
     )
 
 
