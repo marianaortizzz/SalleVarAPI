@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+import ast
+from typing import Any
 
 class Cliente(BaseModel):
     id_cliente: int | None = Field(default=None)
@@ -14,6 +16,20 @@ class Cliente(BaseModel):
     salon : int = Field(ge=1, le=999)
     calificacion_cliente: int | None = Field(default=None)
     calificacion_repartidor: int | None = Field(default=None)
+
+    @field_validator('negocios_favoritos', mode='before')
+    @classmethod
+    def parsear_lista(cls, v: Any) -> list[str]:
+        # Si el valor es un string (viene de la BD así), lo convertimos
+        if isinstance(v, str):
+            try:
+                # ast.literal_eval es capaz de entender "['A', 'B']"
+                return ast.literal_eval(v)
+            except (ValueError, SyntaxError):
+                # Si falla la conversión, devolvemos lista vacía para no romper la API
+                return []
+        # Si ya es una lista o es None, lo dejamos pasar
+        return v if v is not None else []
 
     class Config:
         json_schema = {

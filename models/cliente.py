@@ -9,7 +9,7 @@ class Cliente(Base):
     matricula = Column(SmallInteger)
     carrera = Column(String(255))
     repartidor = Column(Boolean)
-    negocios_favoritos = Column(JSON)
+    negocios_favoritos = Column(String(255))
     contrasena = Column(String(64))
     foto = Column(String(255))
     telefono = Column(String(15))
