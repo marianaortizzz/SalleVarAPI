@@ -28,6 +28,14 @@ class ProductoService:
             joinedload(ProductoModel.modificadores).joinedload(ModificadorProductoModel.opciones)
         ).all()
         return productos
+
+    def get_product_by_id(self, id_producto: int):
+        """
+        Obtener producto por id
+        """
+        return self.db.query(ProductoModel).filter(ProductoModel.id_producto == id_producto).options(
+            joinedload(ProductoModel.modificadores).joinedload(ModificadorProductoModel.opciones)
+        ).first()
     
     def create_producto_completo(self, product_data: ProductoCreate, id_negocio: int):
         producto_fields = product_data.model_dump(exclude={"modificadores"})

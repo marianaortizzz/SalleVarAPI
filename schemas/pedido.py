@@ -16,8 +16,8 @@ class PedidoBase(BaseModel):
     costo_servicio: Decimal = Field(..., decimal_places=2)
     monto_total: Decimal = Field(..., decimal_places=2)
     status_general: Literal['Pendiente', 'En_proceso', 'Completado', 'Cancelado']
-    status_rest: Literal['Pendiente', 'Preparando', 'Listo']
-    status_rep: Literal['Asignado', 'En_camino', 'Entregado']
+    status_rest: Literal['Pendiente', 'Activo', 'Entregado']
+    status_rep: Literal['Activo', 'Pendiente', 'Entregado']
     status_pago: Literal['Pendiente', 'Pagado', 'Rechazado']
     codigo_rest: str
     codigo_rep: str
