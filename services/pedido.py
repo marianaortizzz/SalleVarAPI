@@ -1,6 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 from typing import List
+from SalleVarAPI.schemas import pedido
 from models.detalle_pedido import DetallePedido
 from models.pedido import Pedido as PedidoModel
 from schemas.pedido import Pedido as PedidoSchema
@@ -99,7 +100,21 @@ class PedidoService:
             pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
             if not pedido:
                 return None
-            pedido.status_rest = nuevo_status
+            
+            if nuevo_status == "Preparando":
+                pedido.status_rest = nuevo_status
+                pedido.status_general = "En_proceso"
+            elif nuevo_status == "Cancelado":
+                pedido.status_general = "Cancelado"
+            elif nuevo_status == "Listo":
+                if pedido.delivery:
+                    pedido.status_rest = nuevo_status
+                    pedido.status_general = "En_proceso"
+                else:
+                    pedido.status_general = "Completado"
+                    pedido.status_rest = nuevo_status
+            else :
+                pedido.status_general = "En_proceso"
             self.db.commit()
             self.db.refresh(pedido)
             for detalle in pedido.detalles:
@@ -111,19 +126,17 @@ class PedidoService:
             pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
             if not pedido:
                 return None
-            pedido.status_rep = nuevo_status
-            self.db.commit()
-            self.db.refresh(pedido)
-            for detalle in pedido.detalles:
-                producto = self.db.query(ProductoModel).filter(ProductoModel.id_producto == detalle.id_producto).first()
-                detalle.nombre = producto.nombre
-                detalle.descripcion = producto.descripcion
-            return pedido
-        elif tipo_cuenta == "cliente":
-            pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
-            if not pedido:
-                return None
-            pedido.status_general = nuevo_status
+            if nuevo_status == "Asignado":
+                pedido.status_rep = nuevo_status
+                pedido.status_general = "En_proceso"
+            elif nuevo_status == "En_camino":
+                pedido.status_rep = nuevo_status
+                pedido.status_general = "En_proceso"
+            elif nuevo_status == "Cancelado":
+                pedido.status_general = "Cancelado"
+            elif nuevo_status == "Entregado":
+                pedido.status_rep = nuevo_status
+                pedido.status_general = "Completado"
             self.db.commit()
             self.db.refresh(pedido)
             for detalle in pedido.detalles:
