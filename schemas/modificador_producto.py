@@ -55,9 +55,10 @@ class ModificadorProductoUpdate(BaseModel):
     nombre_modificador: Optional[str] = None
     num_max_selec: Optional[int] = None
     opciones: Optional[List[OpcionModificadorUpdate]] = None
+    
 
 class ModificadorProducto(ModificadorProductoBase):
-    id: int
+    id_modificador: int
     id_producto: int
     opciones: List[OpcionModificador] = []
 
