@@ -18,10 +18,16 @@ class PedidoService:
         Obtiene todos los pedidos asociados a un ID específico según el tipo de cuenta y el estado general.
         """
         if tipo_cuenta == "cliente":
-            pedidos = self.db.query(PedidoModel).filter(
-                PedidoModel.id_cliente == id, 
-                PedidoModel.status_general == status
-            ).options(joinLoaded(PedidoModel.detalles)).all()
+            if(status=="activos"):
+                pedidos = self.db.query(PedidoModel).filter(
+                    PedidoModel.id_cliente == id, 
+                    PedidoModel.status_general.in_(["Pendiente", "En_proceso"])
+                ).options(joinLoaded(PedidoModel.detalles)).all()
+            else:
+                pedidos = self.db.query(PedidoModel).filter(
+                    PedidoModel.id_cliente == id, 
+                    PedidoModel.status_general.in_(["Completado", "Cancelado"])
+                ).options(joinLoaded(PedidoModel.detalles)).all()
             for pedido in pedidos:
                 for detalle in pedido.detalles:
                     producto = self.db.query(ProductoModel).filter(ProductoModel.id_producto == detalle.id_producto).first()
