@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 import ast
-from typing import Any
+from typing import Any, Optional
 
 class Cliente(BaseModel):
     id_cliente: int | None = Field(default=None)
@@ -9,7 +9,7 @@ class Cliente(BaseModel):
     carrera: str = Field(min_length=1, max_length=255)
     repartidor: bool
     negocios_favoritos: list[str] = Field(default=[])
-    contrasena: str = Field(min_length=6, max_length=64)
+    contrasena: Optional[str] = Field(default=None, min_length=6, max_length=64)
     foto: str | None = Field(default=None, max_length=255)
     telefono: str = Field(min_length=7, max_length=15)
     edificio : str = Field(min_length=1, max_length=1)
