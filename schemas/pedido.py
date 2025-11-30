@@ -15,10 +15,10 @@ class PedidoBase(BaseModel):
     costo_envio: Decimal = Field(..., decimal_places=2)
     costo_servicio: Decimal = Field(..., decimal_places=2)
     monto_total: Decimal = Field(..., decimal_places=2)
-    status_general: Literal['Pendiente', 'En_proceso', 'Completado', 'Cancelado']
-    status_rest: Literal['Pendiente', 'Activo', 'Entregado']
-    status_rep: Literal['Activo', 'Pendiente', 'Entregado']
-    status_pago: Literal['Pendiente', 'Pagado', 'Rechazado']
+    status_general: str
+    status_rest: str
+    status_rep: str
+    status_pago: str
     codigo_rest: str
     codigo_rep: str
     para_llevar: bool
