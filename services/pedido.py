@@ -102,6 +102,11 @@ class PedidoService:
             pedido.status_rest = nuevo_status
             self.db.commit()
             self.db.refresh(pedido)
+            for detalle in pedido.detalles:
+                producto = self.db.query(ProductoModel).filter(ProductoModel.id_producto == detalle.id_producto).first()
+                detalle.nombre = producto.nombre
+                detalle.descripcion = producto.descripcion
+            return pedido
         elif tipo_cuenta == "repartidor":
             pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
             if not pedido:
@@ -109,6 +114,11 @@ class PedidoService:
             pedido.status_rep = nuevo_status
             self.db.commit()
             self.db.refresh(pedido)
+            for detalle in pedido.detalles:
+                producto = self.db.query(ProductoModel).filter(ProductoModel.id_producto == detalle.id_producto).first()
+                detalle.nombre = producto.nombre
+                detalle.descripcion = producto.descripcion
+            return pedido
         elif tipo_cuenta == "cliente":
             pedido = self.db.query(PedidoModel).filter(PedidoModel.id_pedido == pedido_id).first()
             if not pedido:
@@ -116,6 +126,11 @@ class PedidoService:
             pedido.status_general = nuevo_status
             self.db.commit()
             self.db.refresh(pedido)
+            for detalle in pedido.detalles:
+                producto = self.db.query(ProductoModel).filter(ProductoModel.id_producto == detalle.id_producto).first()
+                detalle.nombre = producto.nombre
+                detalle.descripcion = producto.descripcion
+            return pedido
         else:
             return None
         
