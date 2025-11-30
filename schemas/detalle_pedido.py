@@ -7,7 +7,7 @@ class DetallePedidoCreate(BaseModel):
     id_producto: int
     cantidad: int
     precio_unitario: Decimal = Field(..., description="Precio del producto al momento del pedido")
-    rating: Optional[int] = Field(None, description="Rating del producto en el pedido")
+    rating: Optional[Decimal] = Field(None, description="Rating del producto en el pedido")
     opciones: Optional[str] = Field(None, description="Opciones o modificaciones aplicadas al producto en el pedido")
     comentarios: Optional[str] = Field(None, description="Comentarios adicionales para el producto en el pedido")
     total_producto: Optional[Decimal] = Field(None, description="Total del producto en el pedido")
