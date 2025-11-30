@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 import ast
 from typing import Any, Optional
 
@@ -32,6 +32,7 @@ class Cliente(BaseModel):
         return v if v is not None else []
 
     class Config:
+        from_attributes = True
         json_schema = {
             "example": {
                 "id_cliente": 1,
