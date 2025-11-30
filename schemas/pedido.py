@@ -10,7 +10,7 @@ from schemas.detalle_pedido import DetallePedidoCreate, DetallePedido, DetallePe
 from pydantic import ConfigDict
 
 class PedidoBase(BaseModel):
-    fecha_pedido: date
+    fecha_pedido: str
     subtotal: Decimal = Field(..., decimal_places=2)
     costo_envio: Decimal = Field(..., decimal_places=2)
     costo_servicio: Decimal = Field(..., decimal_places=2)
@@ -47,10 +47,10 @@ class Pedido(PedidoBase):
 
 
 class PedidoUpdate(BaseModel):
-    fecha_pedido: Optional[date] = None
-    status_general: Optional[Literal['Pendiente', 'En_proceso', 'Completado', 'Cancelado']] = None
-    status_rep: Optional[Literal['Asignado', 'En_camino', 'Entregado']] = None
-    status_rest: Optional[Literal['Pendiente', 'Preparando', 'Listo']] = None
+    fecha_pedido: Optional[str] = None
+    status_general: Optional[str] = None
+    status_rep: Optional[str] = None
+    status_rest: Optional[str] = None
     id_repartidor: Optional[int] = None
     rating_pedido: Optional[Decimal] = Field(None, decimal_places=1)
     rating_rep: Optional[Decimal] = Field(None, decimal_places=1)

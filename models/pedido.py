@@ -6,10 +6,10 @@ class Pedido(Base):
     __tablename__ = "pedido"
 
     id_pedido = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    fecha_pedido = Column(Date)
-    status_general = Column(Enum('Pendiente', 'En_proceso', 'Completado', 'Cancelado'))
-    status_rest = Column(Enum('Pendiente', 'Preparando', 'Listo'))
-    status_rep = Column(Enum('Asignado', 'En_camino', 'Entregado'))
+    fecha_pedido = Column(String(50))
+    status_general = Column(String(50))
+    status_rest = Column(String(50))
+    status_rep = Column(String(50))
     id_cliente = Column(Integer, ForeignKey('cliente.id_cliente'))
     id_negocio = Column(Integer, ForeignKey('negocio.id_negocio'))
     id_repartidor = Column(Integer,ForeignKey('cliente.id_cliente'), nullable=True)
