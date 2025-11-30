@@ -12,8 +12,8 @@ class Cliente(BaseModel):
     contrasena: Optional[str] = Field(default=None, max_length=64)
     foto: str | None = Field(default=None, max_length=255)
     telefono: str = Field(min_length=7, max_length=15)
-    edificio : str = Field(min_length=1, max_length=1)
-    salon : int = Field(ge=1, le=999)
+    edificio : Optional[str] = Field(default=None, min_length=0, max_length=1) 
+    salon : Optional[int] = Field(default=None, ge=0, le=999)
     calificacion_cliente: int | None = Field(default=None)
     calificacion_repartidor: int | None = Field(default=None)
 

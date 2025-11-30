@@ -43,21 +43,14 @@ class NegocioService:
         if not negocio:
             return None
         
-        # Asignación de datos
-        negocio.nombre = data.nombre
-        # negocio.categoria = data.categoria  <-- BORRA ESTA LÍNEA (Error: no existe)
-        
+        negocio.nombre = data.nombre        
         negocio.rating = data.rating
         negocio.rango_precios = data.rango_precios
         negocio.ubicacion = data.ubicacion
         negocio.nombre_responsable = data.nombre_responsable
         negocio.telefono = data.telefono
-        
-        negocio.categorias = data.categorias # <-- ESTA ES LA CORRECTA
-        
-        negocio.imagen = data.imagen
-        
-        # CORRIGE ESTO TAMBIÉN (Deben ser dos campos, no "horario_atencion"):
+        negocio.categorias = data.categorias
+        negocio.imagen = data.imagen        
         negocio.horario_apertura = data.horario_apertura 
         negocio.horario_cierre = data.horario_cierre
         
@@ -162,7 +155,7 @@ class NegocioService:
         Login de negocio
         """
         usuario = self.db.query(NegocioModel).filter(
-            (NegocioModel.nombre == login_data.usuario)
+            (NegocioModel.nombre == login_data.usuario) 
         ).first()
 
         if not usuario:
