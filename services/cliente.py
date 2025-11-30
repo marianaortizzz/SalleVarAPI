@@ -57,10 +57,21 @@ class ClienteService:
         cliente.matricula = data.matricula
         cliente.carrera = data.carrera
         cliente.repartidor = data.repartidor
-        cliente.negocios_favoritos = data.negocios_favoritos
-        cliente.contrasena = data.contrasena
+        
+        if isinstance(data.negocios_favoritos, list):
+             cliente.negocios_favoritos = str(data.negocios_favoritos)
+        else:
+             cliente.negocios_favoritos = data.negocios_favoritos
+
+        # PROTECCIÓN DE CONTRASEÑA 
+        if data.contrasena and len(data.contrasena) >= 6:
+            cliente.contrasena = data.contrasena
+
         cliente.foto = data.foto
         cliente.telefono = data.telefono
+        # Agrega estos si te faltan en la asignación:
+        cliente.edificio = data.edificio
+        cliente.salon = data.salon
 
         self.db.commit()
         self.db.refresh(cliente)
