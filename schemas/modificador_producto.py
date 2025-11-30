@@ -30,7 +30,6 @@ class OpcionModificadorUpdate(BaseModel):
 
 class OpcionModificador(OpcionModificadorBase):
     id: int
-    id_producto: int
 
     model_config= ConfigDict(from_attributes=True)
 
