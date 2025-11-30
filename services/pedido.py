@@ -78,6 +78,10 @@ class PedidoService:
         self.db.add(db_pedido)
         self.db.commit() 
         self.db.refresh(db_pedido) 
+        for detalle in db_pedido.detalles:
+            producto = self.db.query(ProductoModel).filter(ProductoModel.id_producto == detalle.id_producto).first()
+            detalle.nombre = producto.nombre
+            detalle.descripcion = producto.descripcion
 
         return db_pedido
     
