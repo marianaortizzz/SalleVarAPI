@@ -25,11 +25,23 @@ class ClienteService:
         """
         Crear un cliente
         """
+        # 1. Convertimos el objeto Pydantic a un diccionario
         cliente_data = cliente.model_dump()
+
+        # 2. TRUCO DE MAGIA: Convertimos la lista a String
+        # La base de datos no entiende listas, entiende texto.
+        # Esto convertirá ["A", "B"] en "['A', 'B']"
+        if "negocios_favoritos" in cliente_data:
+            lista = cliente_data["negocios_favoritos"]
+            cliente_data["negocios_favoritos"] = str(lista)
+
+        # 3. Creamos el modelo de base de datos
         new_cliente = ClienteModel(**cliente_data)
+        
         self.db.add(new_cliente)
         self.db.commit()
         self.db.refresh(new_cliente)
+        
         return new_cliente
     
     def update_cliente(self, id_cliente: int, data: Cliente):
@@ -79,13 +91,37 @@ class ClienteService:
 
     # CONVERTIR A USUARIO
     def convert_to_usuario(self, cliente: ClienteModel):
+        raw = cliente.negocios_favoritos
+        lista_final = []
+
+        if isinstance(raw, list):
+            lista_final = raw
+        elif isinstance(raw, str):
+            clean_raw = raw.strip()
+            
+            if clean_raw == "[]" or clean_raw == "":
+                lista_final = []
+            else:
+                try:
+                    import ast
+                    lista_final = ast.literal_eval(clean_raw)
+                except:
+                    try:
+                        import json
+                        lista_final = json.loads(clean_raw)
+                    except:
+                        lista_final = []
+        
+        if not isinstance(lista_final, list):
+            lista_final = list(lista_final)
+
         return UsuarioResponse(
             id_usuario=cliente.id_cliente,
             nombre_usuario=str(cliente.matricula),
             nombre_completo=cliente.nombre_completo,
             matricula=cliente.matricula,
-            carrera=cliente.carrera,
-            negocio_favorito=cliente.negocios_favoritos,
+            carrera=cliente.carrera,            
+            negocio_favorito=lista_final, 
             foto=cliente.foto,
             telefono=cliente.telefono,
             edificio=cliente.edificio,
