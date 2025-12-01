@@ -134,6 +134,7 @@ class PedidoService:
                 pedido.status_rep = nuevo_status
                 pedido.status_general = "En_proceso"
             elif nuevo_status == "Cancelado":
+                pedido.status_rep = "Entregado"
                 pedido.status_general = "Cancelado"
             elif nuevo_status == "Entregado":
                 pedido.status_rep = nuevo_status
