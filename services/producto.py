@@ -40,14 +40,15 @@ class ProductoService:
     def create_producto_completo(self, product_data: ProductoCreate, id_negocio: int):
         producto_fields = product_data.model_dump(exclude={"modificadores"})
         db_producto = ProductoModel(**producto_fields, id_negocio=id_negocio) 
-        for mod_in in product_data.modificadores:
-            modificador_fields = mod_in.model_dump(exclude={"opciones"})
-            db_modificador = ModificadorProductoModel(**modificador_fields)
-            for opcion_in in mod_in.opciones:
-                opcion_fields = opcion_in.model_dump()
-                db_opcion = OpcionModificadorModel(**opcion_fields)
-                db_modificador.opciones.append(db_opcion)
-            db_producto.modificadores.append(db_modificador)
+        if(product_data.modificadores):
+            for mod_in in product_data.modificadores:
+                modificador_fields = mod_in.model_dump(exclude={"opciones"})
+                db_modificador = ModificadorProductoModel(**modificador_fields)
+                for opcion_in in mod_in.opciones:
+                    opcion_fields = opcion_in.model_dump()
+                    db_opcion = OpcionModificadorModel(**opcion_fields)
+                    db_modificador.opciones.append(db_opcion)
+                db_producto.modificadores.append(db_modificador)
         self.db.add(db_producto)
         self.db.commit() 
         self.db.refresh(db_producto) 

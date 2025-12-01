@@ -27,7 +27,7 @@ class ProductoBase(BaseModel):
     )
 
 class ProductoCreate(ProductoBase):
-    modificadores: List[ModificadorProductoCreate] = Field(..., description="Lista de modificadores a aplicar al producto.")
+    modificadores: Optional[List[ModificadorProductoCreate]] = Field(None, description="Lista de modificadores a aplicar al producto.")
 
 class ProductoUpdate(BaseModel):
     nombre: Optional[str] = Field(None, description="Nombre del producto")
@@ -41,7 +41,7 @@ class ProductoUpdate(BaseModel):
 class Producto(ProductoBase):
     id_producto: int = Field(..., description="Identificador único del producto")
     id_negocio: int = Field(..., description="Identificador del negocio asociado al producto")
-    modificadores: List[ModificadorProducto] = Field(..., description="Lista de modificadores asociados al producto.") 
+    modificadores: Optional[List[ModificadorProducto]] = Field(None, description="Lista de modificadores asociados al producto.") 
 
     model_config = ConfigDict(
         from_attributes=True
