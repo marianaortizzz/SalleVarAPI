@@ -1,7 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 from typing import List
-from SalleVarAPI.schemas import pedido
+from schemas import pedido
 from models.detalle_pedido import DetallePedido
 from models.pedido import Pedido as PedidoModel
 from schemas.pedido import Pedido as PedidoSchema
