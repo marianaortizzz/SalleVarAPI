@@ -6,7 +6,7 @@ class Cliente(Base):
 
     id_cliente = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nombre_completo = Column(String(255))
-    matricula = Column(SmallInteger)
+    matricula = Column(Integer)
     carrera = Column(String(255))
     repartidor = Column(Boolean)
     negocios_favoritos = Column(String(255))
